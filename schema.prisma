@@ -1,0 +1,50 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id                     String   @id @default(uuid())
+  email                  String   @unique
+  stripeConnectAccountId String?
+  createdAt              DateTime @default(now())
+  gachas                 Gacha[]
+}
+
+model Gacha {
+  id           String      @id @default(uuid())
+  name         String
+  priceInCents Int
+  creatorId    String
+  creator      User        @relation(fields: [creatorId], references: [id])
+  items        GachaItem[]
+  pulls        Pull[]
+  createdAt    DateTime    @default(now())
+}
+
+model GachaItem {
+  id         String   @id @default(uuid())
+  gachaId    String
+  gacha      Gacha    @relation(fields: [gachaId], references: [id], onDelete: Cascade)
+  name       String
+  rarity     String
+  modelUrl   String
+  dropWeight Int
+  pulls      Pull[]
+}
+
+model Pull {
+  id              String    @id @default(uuid())
+  gachaId         String
+  gacha           Gacha     @relation(fields: [gachaId], references: [id])
+  itemId          String
+  item            GachaItem @relation(fields: [itemId], references: [id])
+  paymentIntentId String    @unique
+  amountPaid      Int
+  platformFee     Int
+  createdAt       DateTime  @default(now())
+}
