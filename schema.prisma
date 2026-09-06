@@ -8,43 +8,67 @@ generator client {
 }
 
 model User {
-  id                     String   @id @default(uuid())
-  email                  String   @unique
+  id                     String     @id @default(uuid())
+  email                  String     @unique
+  passwordHash           String?    // Para autenticación local (opcional si usas OAuth)
   stripeConnectAccountId String?
-  createdAt              DateTime @default(now())
+  createdAt              DateTime   @default(now())
+  
   gachas                 Gacha[]
+  inventory              UserItem[]
+  pulls                  Pull[]
 }
 
 model Gacha {
   id           String      @id @default(uuid())
   name         String
-  priceInCents Int
+  description  String?
+  priceInCents Int         @default(499)
   creatorId    String
-  creator      User        @relation(fields: [creatorId], references: [id])
+  creator      User        @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  createdAt    DateTime    @default(now())
+
   items        GachaItem[]
   pulls        Pull[]
-  createdAt    DateTime    @default(now())
 }
 
 model GachaItem {
-  id         String   @id @default(uuid())
+  id         String     @id @default(uuid())
   gachaId    String
-  gacha      Gacha    @relation(fields: [gachaId], references: [id], onDelete: Cascade)
+  gacha      Gacha      @relation(fields: [gachaId], references: [id], onDelete: Cascade)
   name       String
-  rarity     String
+  rarity     String     // C, R, SR, SSR
   modelUrl   String
-  dropWeight Int
+  dropWeight Int        // Peso para el cálculo de probabilidades (ej: 60, 25, 12, 3)
+  
   pulls      Pull[]
+  userItems  UserItem[]
 }
 
 model Pull {
   id              String    @id @default(uuid())
+  userId          String
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   gachaId         String
-  gacha           Gacha     @relation(fields: [gachaId], references: [id])
+  gacha           Gacha     @relation(fields: [gachaId], references: [id], onDelete: Cascade)
   itemId          String
   item            GachaItem @relation(fields: [itemId], references: [id])
   paymentIntentId String    @unique
   amountPaid      Int
   platformFee     Int
   createdAt       DateTime  @default(now())
+
+  @@index([userId])
+  @@index([gachaId])
+}
+
+model UserItem {
+  id        String    @id @default(uuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  itemId    String
+  item      GachaItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  obtainedAt DateTime @default(now())
+
+  @@index([userId])
 }
