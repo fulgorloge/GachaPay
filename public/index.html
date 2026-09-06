@@ -1,96 +1,360 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GachaPay - Plataforma de Gachas</title>
-  <link rel="stylesheet" href="/styles.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://js.stripe.com/v3/"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800;900&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            display: ['"Space Grotesk"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#f0f3ff',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Efectos de Iluminación y Neón */
+    .glow-ssr { box-shadow: 0 0 35px -5px rgba(239, 68, 68, 0.6); }
+    .glow-sr { box-shadow: 0 0 35px -5px rgba(168, 85, 247, 0.6); }
+    .glow-r { box-shadow: 0 0 35px -5px rgba(59, 130, 246, 0.6); }
+    .glow-c { box-shadow: 0 0 35px -5px rgba(34, 197, 94, 0.4); }
+
+    /* Animaciones Custom */
+    @keyframes pulse-ring {
+      0% { transform: scale(0.95); opacity: 0.8; }
+      50% { transform: scale(1.05); opacity: 0.4; }
+      100% { transform: scale(0.95); opacity: 0.8; }
+    }
+    .animate-pulse-ring { animation: pulse-ring 3s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+
+    @keyframes card-reveal {
+      0% { transform: scale(0.5) rotateY(180deg); opacity: 0; }
+      100% { transform: scale(1) rotateY(0deg); opacity: 1; }
+    }
+    .animate-card-reveal { animation: card-reveal 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+
+    /* Fondo de malla espacial */
+    .bg-grid-pattern {
+      background-size: 30px 30px;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    }
+  </style>
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col justify-between">
+<body class="bg-[#090d16] text-slate-100 font-sans min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white bg-grid-pattern relative overflow-x-hidden">
 
-  <nav class="border-b border-slate-800 bg-slate-900/80 backdrop-blur-md sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-      <div class="flex items-center gap-2">
-        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center font-black text-white text-lg">G</div>
-        <span class="font-extrabold text-xl tracking-tight text-white">GachaPay</span>
-      </div>
-      <a href="#creadores" class="bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-bold px-4 py-2 rounded-xl transition">Crear mi Gacha</a>
-    </div>
-  </nav>
+  <!-- Luces de fondo decorativas -->
+  <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[350px] bg-indigo-600/15 blur-[140px] pointer-events-none rounded-full"></div>
+  <div class="absolute top-96 right-0 w-[400px] h-[400px] bg-purple-600/10 blur-[120px] pointer-events-none rounded-full"></div>
 
-  <main class="pt-12 pb-16 px-6 max-w-7xl mx-auto space-y-20 flex-grow">
-    <section class="grid lg:grid-cols-2 gap-12 items-center">
-      <div class="space-y-6">
-        <span class="px-3 py-1 bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-bold rounded-full uppercase">Demo interactiva</span>
-        <h1 class="text-4xl sm:text-6xl font-black leading-tight text-white">Consigue modelos únicos</h1>
-        <p class="text-slate-400 text-lg">Prueba el sistema de tiradas. Cada pago procesado transfiere el monto directo al banco del creador reservando tu comisión.</p>
-      </div>
-
-      <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl flex flex-col items-center">
-        <div id="gacha-screen" class="w-full h-64 bg-slate-950 rounded-2xl border border-slate-800 flex flex-col items-center justify-center p-6 text-center">
-          <div id="state-idle" class="space-y-2">
-            <p class="text-5xl">🎁</p>
-            <p class="text-sm text-slate-400">Presiona el botón para tirar</p>
-          </div>
-          <div id="state-spinning" class="hidden flex-col items-center gap-4">
-            <div class="w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin-custom"></div>
-            <p class="text-sm font-semibold text-slate-400">Procesando tirada...</p>
-          </div>
-          <div id="state-result" class="hidden space-y-3">
-            <span id="result-badge" class="inline-block px-3 py-1 rounded-full text-xs font-black text-white"></span>
-            <h3 id="result-title" class="text-2xl font-black text-white"></h3>
+  <!-- Header / Navegación -->
+  <header class="border-b border-slate-800/80 bg-[#090d16]/80 backdrop-blur-xl sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 p-[2px] shadow-lg shadow-indigo-500/20">
+          <div class="w-full h-full bg-[#090d16] rounded-[14px] flex items-center justify-center">
+            <span class="font-display font-black text-transparent bg-clip-text bg-gradient-to-tr from-indigo-400 to-purple-400 text-xl">G</span>
           </div>
         </div>
+        <span class="font-display font-black text-2xl tracking-tight text-white">Gacha<span class="text-indigo-400">Pay</span></span>
+      </div>
 
-        <button id="pull-btn" onclick="executePull()" class="w-full mt-6 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 text-white font-extrabold text-lg rounded-2xl transition">
-          Tirar ($4.99 USD)
+      <div class="flex gap-4 items-center">
+        <button onclick="toggleModal(true)" class="hidden sm:flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-white px-3 py-2 rounded-xl border border-slate-800 hover:border-slate-700 bg-slate-900/50 transition">
+          <span>📊</span> Probabilidades
         </button>
+        <a href="#creadores" class="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-xs sm:text-sm font-extrabold px-5 py-2.5 rounded-xl shadow-lg shadow-indigo-500/25 transition-all hover:scale-[1.02]">
+          Crear mi Gacha
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="pt-10 pb-20 px-6 max-w-7xl mx-auto space-y-20 flex-grow relative z-10">
+    
+    <!-- Hero + Sección de Tirada -->
+    <section class="grid lg:grid-cols-12 gap-12 items-center">
+      
+      <!-- Columna Izquierda: Información -->
+      <div class="lg:col-span-6 space-y-6">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-bold rounded-full">
+          <span class="w-2 h-2 rounded-full bg-indigo-400 animate-ping"></span>
+          Monetización Web3 & Web2 para Creadores
+        </div>
+        
+        <h1 class="font-display text-4xl sm:text-6xl font-black leading-[1.1] text-white">
+          Consigue modelos 3D y arte <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">legendario.</span>
+        </h1>
+        
+        <p class="text-slate-400 text-base sm:text-lg leading-relaxed">
+          Tira la cápsula y desbloquea activos digitales al instante. Cada tirada distribuye los fondos automáticamente entre la plataforma y la cuenta bancaria del creador.
+        </p>
+
+        <!-- Card con ID del Usuario -->
+        <div class="p-4 bg-slate-900/80 border border-slate-800/80 rounded-2xl backdrop-blur-md flex items-center justify-between shadow-xl">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-lg">👤</div>
+            <div>
+              <p class="text-[10px] uppercase tracking-wider font-extrabold text-slate-500">Sesión de Usuario</p>
+              <p id="user-id-display" class="font-mono text-xs text-indigo-300 font-bold">Cargando...</p>
+            </div>
+          </div>
+          <button onclick="copyUserId()" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-2 rounded-xl border border-slate-700 font-bold transition">
+            Copiar ID
+          </button>
+        </div>
+      </div>
+
+      <!-- Columna Derecha: Tarjeta / Ruleta Gacha Interactiva -->
+      <div class="lg:col-span-6 flex flex-col items-center">
+        <div class="w-full max-w-md bg-gradient-to-b from-slate-900/90 to-slate-950/90 border border-slate-800/80 rounded-3xl p-6 sm:p-8 shadow-2xl backdrop-blur-xl relative group">
+          
+          <!-- Contenedor del Display -->
+          <div id="gacha-screen" class="w-full h-80 bg-[#050811] rounded-2xl border border-slate-800/80 flex flex-col items-center justify-center p-6 text-center relative overflow-hidden transition-all duration-500">
+            
+            <!-- Estado 1: Idle (Esperando tirada) -->
+            <div id="state-idle" class="space-y-4 flex flex-col items-center">
+              <div class="relative">
+                <div class="absolute inset-0 rounded-full bg-indigo-500/20 blur-xl animate-pulse-ring"></div>
+                <div class="w-24 h-24 rounded-2xl bg-gradient-to-tr from-slate-900 to-slate-800 border border-slate-700/80 flex items-center justify-center text-5xl shadow-2xl relative z-10">
+                  🔮
+                </div>
+              </div>
+              <div>
+                <h3 class="font-display font-extrabold text-lg text-white">Cápsula Lista</h3>
+                <p class="text-xs text-slate-400 mt-1">Presiona el botón para realizar tu tirada</p>
+              </div>
+            </div>
+
+            <!-- Estado 2: Cargando / Girando -->
+            <div id="state-spinning" class="hidden flex-col items-center gap-4">
+              <div class="relative w-16 h-16">
+                <div class="absolute inset-0 rounded-full border-4 border-indigo-500/20"></div>
+                <div class="absolute inset-0 rounded-full border-4 border-indigo-500 border-t-transparent animate-spin"></div>
+              </div>
+              <p class="text-xs font-extrabold text-indigo-400 tracking-wider uppercase animate-pulse">Procesando Pago y Tirada...</p>
+            </div>
+
+            <!-- Estado 3: Resultado Ganador -->
+            <div id="state-result" class="hidden flex-col items-center space-y-4 z-10 w-full">
+              <div id="result-card-container" class="w-full">
+                <span id="result-badge" class="inline-block px-4 py-1 rounded-full text-xs font-black text-white uppercase tracking-widest shadow-lg"></span>
+                <h3 id="result-title" class="font-display text-2xl font-black text-white mt-3"></h3>
+              </div>
+              
+              <a id="result-download" href="#" target="_blank" class="hidden text-xs bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold px-4 py-2.5 rounded-xl shadow-lg shadow-indigo-500/30 transition">
+                ⚡ Descargar Modelo 3D
+              </a>
+            </div>
+          </div>
+
+          <!-- ID Oculto de la Gacha -->
+          <input id="gacha-id-input" type="hidden" value="demo-gacha-id">
+
+          <!-- Botón Principal -->
+          <button id="pull-btn" onclick="executePull()" class="w-full mt-6 py-4 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:to-pink-500 text-white font-display font-black text-lg rounded-2xl shadow-xl shadow-indigo-600/25 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50">
+            Tirar ($4.99 USD)
+          </button>
+        </div>
       </div>
     </section>
 
-    <section id="creadores" class="bg-slate-900 border border-slate-800 rounded-3xl p-8 sm:p-12 text-center space-y-6">
-      <h2 class="text-3xl sm:text-4xl font-black text-white">Crea tu Gacha y recibe pagos directos</h2>
-      <p class="text-slate-300 max-w-2xl mx-auto">Conecta tu cuenta bancaria a través de Stripe para empezar a cobrar por cada tiro.</p>
-      <div class="max-w-md mx-auto flex gap-3">
-        <input id="creator-email" type="email" placeholder="tu-correo@ejemplo.com" class="flex-1 bg-slate-950 border border-slate-700 px-4 py-3 rounded-xl text-white focus:outline-none">
-        <button onclick="connectBank()" class="bg-white text-slate-950 font-extrabold px-6 py-3 rounded-xl hover:bg-slate-200 transition">Conectar Banco</button>
+    <!-- Sección de Inventario -->
+    <section class="bg-slate-900/50 border border-slate-800/80 rounded-3xl p-6 sm:p-8 backdrop-blur-xl space-y-6">
+      <div class="flex items-center justify-between border-b border-slate-800/80 pb-5">
+        <div>
+          <h2 class="font-display text-2xl font-black text-white">Tu Inventario</h2>
+          <p class="text-xs text-slate-400">Colección de activos vinculados a tu cuenta de usuario</p>
+        </div>
+        <button onclick="loadInventory()" class="text-xs bg-slate-800 hover:bg-slate-700 px-4 py-2 rounded-xl text-slate-300 font-bold border border-slate-700/80 transition flex items-center gap-2">
+          <span>↻</span> Actualizar
+        </button>
+      </div>
+
+      <!-- Grid de Ítems -->
+      <div id="inventory-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+        <p class="text-slate-500 text-xs col-span-full italic">Aún no posees ningún ítem. ¡Prueba a tirar arriba!</p>
+      </div>
+    </section>
+
+    <!-- Onboarding Creadores (Stripe Connect) -->
+    <section id="creadores" class="bg-gradient-to-b from-indigo-950/40 to-slate-900/80 border border-indigo-500/20 rounded-3xl p-8 sm:p-12 text-center space-y-6 relative overflow-hidden">
+      <div class="max-w-2xl mx-auto space-y-4">
+        <h2 class="font-display text-3xl sm:text-4xl font-black text-white">¿Eres Creador? Comienza a Monetizar</h2>
+        <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+          Conecta tu cuenta bancaria a través de Stripe Express y recibe transferencias instantáneas reteniendo el control de tus ventas.
+        </p>
+      </div>
+
+      <div class="max-w-md mx-auto flex flex-col sm:flex-row gap-3">
+        <input id="creator-email" type="email" placeholder="tu-correo@ejemplo.com" class="flex-1 bg-slate-950/80 border border-slate-700 px-4 py-3.5 rounded-xl text-white text-sm focus:outline-none focus:border-indigo-500 transition placeholder:text-slate-600">
+        <button onclick="connectBank()" class="bg-white hover:bg-slate-200 text-slate-950 font-display font-black px-6 py-3.5 rounded-xl transition shadow-xl">
+          Conectar Banco
+        </button>
       </div>
     </section>
   </main>
 
-  <script>
-    const items = [
-      { name: 'Dragón de Fuego Kael', rarity: 'SSR', badgeClass: 'bg-red-600', weight: 5 },
-      { name: 'Espada Rúnica', rarity: 'SR', badgeClass: 'bg-purple-600', weight: 20 },
-      { name: 'Escudo Titán', rarity: 'R', badgeClass: 'bg-blue-600', weight: 35 },
-      { name: 'Poción Vida', rarity: 'C', badgeClass: 'bg-green-600', weight: 40 }
-    ];
+  <!-- Modal de Probabilidades -->
+  <div id="rates-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 max-w-md w-full space-y-6 shadow-2xl">
+      <div class="flex justify-between items-center border-b border-slate-800 pb-4">
+        <h3 class="font-display font-black text-xl text-white">Tabla de Drop Rates</h3>
+        <button onclick="toggleModal(false)" class="text-slate-400 hover:text-white font-bold text-lg">✕</button>
+      </div>
+      <div class="space-y-3 text-sm">
+        <div class="flex justify-between items-center p-3 rounded-2xl bg-slate-950 border border-slate-800">
+          <span class="px-2.5 py-1 bg-red-600/20 text-red-400 border border-red-500/30 rounded-lg text-xs font-black">SSR</span>
+          <span class="text-slate-300 font-medium">Leyenda / Mítico</span>
+          <span class="font-mono text-indigo-400 font-extrabold">5%</span>
+        </div>
+        <div class="flex justify-between items-center p-3 rounded-2xl bg-slate-950 border border-slate-800">
+          <span class="px-2.5 py-1 bg-purple-600/20 text-purple-400 border border-purple-500/30 rounded-lg text-xs font-black">SR</span>
+          <span class="text-slate-300 font-medium">Épico / Raro</span>
+          <span class="font-mono text-indigo-400 font-extrabold">20%</span>
+        </div>
+        <div class="flex justify-between items-center p-3 rounded-2xl bg-slate-950 border border-slate-800">
+          <span class="px-2.5 py-1 bg-blue-600/20 text-blue-400 border border-blue-500/30 rounded-lg text-xs font-black">R</span>
+          <span class="text-slate-300 font-medium">Inusual</span>
+          <span class="font-mono text-indigo-400 font-extrabold">35%</span>
+        </div>
+        <div class="flex justify-between items-center p-3 rounded-2xl bg-slate-950 border border-slate-800">
+          <span class="px-2.5 py-1 bg-green-600/20 text-green-400 border border-green-500/30 rounded-lg text-xs font-black">C</span>
+          <span class="text-slate-300 font-medium">Común</span>
+          <span class="font-mono text-indigo-400 font-extrabold">40%</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    function executePull() {
+  <footer class="border-t border-slate-800/80 py-8 text-center text-xs text-slate-500 relative z-10">
+    © 2026 GachaPay SaaS. Todos los derechos reservados.
+  </footer>
+
+  <script>
+    // Recuperar / Crear ID de Usuario
+    let currentUserId = localStorage.getItem('gachapay_user_id');
+    if (!currentUserId) {
+      currentUserId = 'user_' + Math.random().toString(36).substring(2, 11);
+      localStorage.setItem('gachapay_user_id', currentUserId);
+    }
+    document.getElementById('user-id-display').innerText = currentUserId;
+
+    const RARITY_CONFIG = {
+      'SSR': { badge: 'bg-red-600 text-white shadow-red-500/50', glow: 'glow-ssr', border: 'border-red-500/50' },
+      'SR': { badge: 'bg-purple-600 text-white shadow-purple-500/50', glow: 'glow-sr', border: 'border-purple-500/50' },
+      'R': { badge: 'bg-blue-600 text-white shadow-blue-500/50', glow: 'glow-r', border: 'border-blue-500/50' },
+      'C': { badge: 'bg-green-600 text-white shadow-green-500/50', glow: 'glow-c', border: 'border-green-500/50' }
+    };
+
+    async function executePull() {
       const btn = document.getElementById('pull-btn');
+      const gachaId = document.getElementById('gacha-id-input').value;
+      const screen = document.getElementById('gacha-screen');
+
       btn.disabled = true;
       document.getElementById('state-idle').classList.add('hidden');
       document.getElementById('state-result').classList.add('hidden');
       document.getElementById('state-spinning').classList.remove('hidden');
       document.getElementById('state-spinning').classList.add('flex');
 
-      setTimeout(() => {
-        const totalWeight = items.reduce((sum, i) => sum + i.weight, 0);
-        let random = Math.random() * totalWeight;
-        let won = items[0];
-        for (const item of items) {
-          if (random < item.weight) { won = item; break; }
-          random -= item.weight;
+      try {
+        const res = await fetch('/api/gacha/pull', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ gachaId, userId: currentUserId })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) throw new Error(data.error || 'Error al procesar tirada.');
+
+        const won = data.wonItem;
+        const config = RARITY_CONFIG[won.rarity] || RARITY_CONFIG['C'];
+
+        // Aplicar estilos de animación y neón
+        screen.className = `w-full h-80 bg-[#050811] rounded-2xl border ${config.border} ${config.glow} flex flex-col items-center justify-center p-6 text-center relative overflow-hidden transition-all duration-500`;
+
+        const badge = document.getElementById('result-badge');
+        badge.className = `inline-block px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest ${config.badge}`;
+        badge.innerText = won.rarity;
+
+        document.getElementById('result-title').innerText = won.name;
+
+        const downloadLink = document.getElementById('result-download');
+        if (won.modelUrl) {
+          downloadLink.href = won.modelUrl;
+          downloadLink.classList.remove('hidden');
+        } else {
+          downloadLink.classList.add('hidden');
         }
 
-        document.getElementById('result-badge').className = `inline-block px-3 py-1 rounded-full text-xs font-black text-white ${won.badgeClass}`;
-        document.getElementById('result-badge').innerText = won.rarity;
-        document.getElementById('result-title').innerText = won.name;
         document.getElementById('state-spinning').classList.add('hidden');
         document.getElementById('state-spinning').classList.remove('flex');
-        document.getElementById('state-result').classList.remove('hidden');
+        
+        const resultContainer = document.getElementById('state-result');
+        resultContainer.classList.remove('hidden');
+        resultContainer.classList.add('flex', 'animate-card-reveal');
+
+        await loadInventory();
+
+      } catch (err) {
+        alert('Información: ' + err.message);
+        document.getElementById('state-spinning').classList.add('hidden');
+        document.getElementById('state-spinning').classList.remove('flex');
+        document.getElementById('state-idle').classList.remove('hidden');
+      } finally {
         btn.disabled = false;
-      }, 1500);
+      }
+    }
+
+    async function loadInventory() {
+      const container = document.getElementById('inventory-grid');
+      try {
+        const res = await fetch(`/api/inventory/${currentUserId}`);
+        const items = await res.json();
+
+        if (!Array.isArray(items) || items.length === 0) {
+          container.innerHTML = '<p class="text-slate-500 text-xs col-span-full italic">Aún no posees ningún ítem. ¡Prueba a tirar arriba!</p>';
+          return;
+        }
+
+        container.innerHTML = items.map(record => {
+          const item = record.item;
+          const config = RARITY_CONFIG[item.rarity] || RARITY_CONFIG['C'];
+          return `
+            <div class="bg-slate-950/80 border ${config.border} p-4 rounded-2xl flex flex-col justify-between space-y-3 transition-all hover:scale-105 shadow-lg">
+              <span class="self-start px-2 py-0.5 rounded-lg text-[10px] font-black ${config.badge}">${item.rarity}</span>
+              <p class="font-display font-extrabold text-sm text-white truncate">${item.name}</p>
+              ${item.modelUrl ? `<a href="${item.modelUrl}" target="_blank" class="text-[10px] font-bold text-indigo-400 hover:text-indigo-300">Descargar ↗</a>` : ''}
+            </div>
+          `;
+        }).join('');
+      } catch (e) {
+        console.error('Error al cargar inventario:', e);
+      }
     }
 
     async function connectBank() {
@@ -108,6 +372,17 @@
         alert('Error conectando con el servidor.');
       }
     }
+
+    function toggleModal(show) {
+      document.getElementById('rates-modal').classList.toggle('hidden', !show);
+    }
+
+    function copyUserId() {
+      navigator.clipboard.writeText(currentUserId);
+      alert('ID copiado al portapapeles');
+    }
+
+    loadInventory();
   </script>
 </body>
 </html>
