@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GachaPay - Plataforma de Gachas</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @keyframes spin-slow {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .animate-spin-custom { animation: spin-slow 1s linear infinite; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col justify-between">
+
+  <nav class="border-b border-slate-800 bg-slate-900/80 backdrop-blur-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center font-black text-white text-lg">G</div>
+        <span class="font-extrabold text-xl tracking-tight text-white">GachaPay</span>
+      </div>
+      <a href="#creadores" class="bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-bold px-4 py-2 rounded-xl transition">Crear mi Gacha</a>
+    </div>
+  </nav>
+
+  <main class="pt-12 pb-16 px-6 max-w-7xl mx-auto space-y-20 flex-grow">
+    <section class="grid lg:grid-cols-2 gap-12 items-center">
+      <div class="space-y-6">
+        <span class="px-3 py-1 bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-bold rounded-full uppercase">Demo interactiva</span>
+        <h1 class="text-4xl sm:text-6xl font-black leading-tight text-white">Consigue modelos únicos</h1>
+        <p class="text-slate-400 text-lg">Prueba el sistema de tiradas. Cada pago procesado transfiere el monto directo al banco del creador reservando tu comisión.</p>
+      </div>
+
+      <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl flex flex-col items-center">
+        <div id="gacha-screen" class="w-full h-64 bg-slate-950 rounded-2xl border border-slate-800 flex flex-col items-center justify-center p-6 text-center">
+          <div id="state-idle" class="space-y-2">
+            <p class="text-5xl">🎁</p>
+            <p class="text-sm text-slate-400">Presiona el botón para tirar</p>
+          </div>
+          <div id="state-spinning" class="hidden flex-col items-center gap-4">
+            <div class="w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin-custom"></div>
+            <p class="text-sm font-semibold text-slate-400">Procesando tirada...</p>
+          </div>
+          <div id="state-result" class="hidden space-y-3">
+            <span id="result-badge" class="inline-block px-3 py-1 rounded-full text-xs font-black text-white"></span>
+            <h3 id="result-title" class="text-2xl font-black text-white"></h3>
+          </div>
+        </div>
+
+        <button id="pull-btn" onclick="executePull()" class="w-full mt-6 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 text-white font-extrabold text-lg rounded-2xl transition">
+          Tirar ($4.99 USD)
+        </button>
+      </div>
+    </section>
+
+    <section id="creadores" class="bg-slate-900 border border-slate-800 rounded-3xl p-8 sm:p-12 text-center space-y-6">
+      <h2 class="text-3xl sm:text-4xl font-black text-white">Crea tu Gacha y recibe pagos directos</h2>
+      <p class="text-slate-300 max-w-2xl mx-auto">Conecta tu cuenta bancaria a través de Stripe para empezar a cobrar por cada tiro.</p>
+      <div class="max-w-md mx-auto flex gap-3">
+        <input id="creator-email" type="email" placeholder="tu-correo@ejemplo.com" class="flex-1 bg-slate-950 border border-slate-700 px-4 py-3 rounded-xl text-white focus:outline-none">
+        <button onclick="connectBank()" class="bg-white text-slate-950 font-extrabold px-6 py-3 rounded-xl hover:bg-slate-200 transition">Conectar Banco</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const items = [
+      { name: 'Dragón de Fuego Kael', rarity: 'SSR', badgeClass: 'bg-red-600', weight: 5 },
+      { name: 'Espada Rúnica', rarity: 'SR', badgeClass: 'bg-purple-600', weight: 20 },
+      { name: 'Escudo Titán', rarity: 'R', badgeClass: 'bg-blue-600', weight: 35 },
+      { name: 'Poción Vida', rarity: 'C', badgeClass: 'bg-green-600', weight: 40 }
+    ];
+
+    function executePull() {
+      const btn = document.getElementById('pull-btn');
+      btn.disabled = true;
+      document.getElementById('state-idle').classList.add('hidden');
+      document.getElementById('state-result').classList.add('hidden');
+      document.getElementById('state-spinning').classList.remove('hidden');
+      document.getElementById('state-spinning').classList.add('flex');
+
+      setTimeout(() => {
+        const totalWeight = items.reduce((sum, i) => sum + i.weight, 0);
+        let random = Math.random() * totalWeight;
+        let won = items[0];
+        for (const item of items) {
+          if (random < item.weight) { won = item; break; }
+          random -= item.weight;
+        }
+
+        document.getElementById('result-badge').className = `inline-block px-3 py-1 rounded-full text-xs font-black text-white ${won.badgeClass}`;
+        document.getElementById('result-badge').innerText = won.rarity;
+        document.getElementById('result-title').innerText = won.name;
+        document.getElementById('state-spinning').classList.add('hidden');
+        document.getElementById('state-spinning').classList.remove('flex');
+        document.getElementById('state-result').classList.remove('hidden');
+        btn.disabled = false;
+      }, 1500);
+    }
+
+    async function connectBank() {
+      const email = document.getElementById('creator-email').value;
+      if (!email) return alert('Ingresa tu correo.');
+      try {
+        const res = await fetch('/api/creators/connect', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+        const data = await res.json();
+        if (data.url) window.location.href = data.url;
+      } catch (err) {
+        alert('Error conectando con el servidor.');
+      }
+    }
+  </script>
+</body>
+</html>
