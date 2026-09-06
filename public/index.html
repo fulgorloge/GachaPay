@@ -3,13 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GachaPay — Modern Vault & Digital Assets</title>
-  <script src="https://js.stripe.com/v3/"></script>
+  <title>GachaPay — Arcade & Digital Vault</title>
   
   <!-- Tipografía Ultra Moderna: Space Grotesk + Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,600;0,700;1,300&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
   
   <style>
     /* Reset & CSS Base */
@@ -17,7 +16,6 @@
     html { line-height: 1.5; font-family: 'Plus Jakarta Sans', sans-serif; background-color: #030712; color: #f3f4f6; }
     body { margin: 0; min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between; overflow-x: hidden; position: relative; }
     
-    /* Tipografía Tech */
     .font-mono, .font-heading { font-family: 'Space Grotesk', sans-serif; }
 
     /* Estilo Cyber-Grid Ultra Moderno */
@@ -32,7 +30,6 @@
     .glow-cyan { box-shadow: 0 0 50px -5px rgba(6, 182, 212, 0.4), inset 0 0 20px rgba(6, 182, 212, 0.15); }
     .glow-purple { box-shadow: 0 0 40px -5px rgba(168, 85, 247, 0.35); }
     .glow-blue { box-shadow: 0 0 35px -5px rgba(59, 130, 246, 0.3); }
-    .glow-slate { box-shadow: 0 0 25px -5px rgba(148, 163, 184, 0.15); }
 
     /* Gradientes Neón Modernos */
     .text-gradient {
@@ -62,9 +59,6 @@
     @keyframes spin { to { transform: rotate(360deg); } }
     .animate-spin { animation: spin 1s linear infinite; }
 
-    @keyframes pulse { 50% { opacity: .4; } }
-    .animate-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
-
     /* Layout Helpers */
     .max-w-7xl { max-width: 80rem; }
     .mx-auto { margin-left: auto; margin-right: auto; }
@@ -77,7 +71,6 @@
     .justify-center { justify-content: center; }
     .gap-4 { gap: 1rem; }
     .gap-6 { gap: 1.5rem; }
-    .gap-8 { gap: 2rem; }
 
     /* Botón Moderno Interactivo */
     .modern-btn {
@@ -93,18 +86,27 @@
     .modern-btn:active { transform: translateY(0); }
     .modern-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
 
-    .input-modern {
-      background: rgba(30, 41, 59, 0.5);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 0.875rem 1.25rem;
+    /* Pestañas Selectoras de Juego */
+    .tab-btn {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #94a3b8;
+      padding: 0.75rem 1.25rem;
       border-radius: 14px;
-      color: white;
-      font-size: 0.875rem;
-      outline: none;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
       transition: all 0.3s;
-      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
-    .input-modern:focus { border-color: #38bdf8; box-shadow: 0 0 15px rgba(56, 189, 248, 0.2); }
+    .tab-btn.active {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: #38bdf8;
+      color: white;
+      box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
+    }
 
     /* Badges */
     .badge {
@@ -121,10 +123,23 @@
     .badge-r { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); }
     .badge-c { background: rgba(148, 163, 184, 0.15); color: #cbd5e1; border: 1px solid rgba(148, 163, 184, 0.3); }
 
+    /* Slots */
+    .slot-reel {
+      width: 5rem;
+      height: 6rem;
+      background: #030712;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      box-shadow: inset 0 0 15px rgba(0,0,0,0.8);
+    }
+
     /* Responsive */
     @media (min-width: 640px) {
       .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .sm\:flex-row { flex-direction: row; }
     }
     @media (min-width: 768px) {
       .md\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
@@ -137,7 +152,7 @@
 </head>
 <body class="bg-grid-pattern">
 
-  <!-- Luces Ambientales Modernas -->
+  <!-- Luces Ambientales -->
   <div style="position: absolute; top: -100px; left: 50%; transform: translateX(-50%); width: 800px; height: 400px; background: radial-gradient(circle, rgba(56,189,248,0.12) 0%, rgba(0,0,0,0) 70%); filter: blur(120px); pointer-events: none;"></div>
 
   <!-- Navbar -->
@@ -146,32 +161,31 @@
       <div class="flex items-center gap-4">
         <div style="width: 2.5rem; height: 2.5rem; border-radius: 12px; background: linear-gradient(135deg, #06b6d4, #3b82f6); padding: 1px; display: flex; align-items: center; justify-content: center;">
           <div style="width: 100%; height: 100%; background: #030712; border-radius: 11px; display: flex; align-items: center; justify-content: center;">
-            <span class="font-heading text-gradient" style="font-weight: 700; font-size: 1.2rem;">⚡</span>
+            <span class="font-heading text-gradient" style="font-weight: 700; font-size: 1.2rem;">🎰</span>
           </div>
         </div>
         <div class="flex flex-col">
-          <span class="font-heading" style="font-weight: 700; font-size: 1.15rem; letter-spacing: 0.05em; color: white;">GACHA<span class="text-gradient">PAY</span></span>
-          <span style="font-size: 9px; text-transform: uppercase; letter-spacing: 0.2em; color: #64748b; font-weight: 600;">Next-Gen Digital Vault</span>
+          <span class="font-heading" style="font-weight: 700; font-size: 1.15rem; letter-spacing: 0.05em; color: white;">GACHA<span class="text-gradient">ARCADE</span></span>
+          <span style="font-size: 9px; text-transform: uppercase; letter-spacing: 0.2em; color: #64748b; font-weight: 600;">Random Assets System</span>
         </div>
       </div>
 
-      <div class="flex items-center gap-6">
-        <button onclick="toggleModal(true)" style="background: none; border: none; cursor: pointer; color: #94a3b8; font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 0.4rem;">
-          <span>❖</span> Probabilidades
+      <!-- Monedero / Créditos -->
+      <div class="flex items-center gap-4">
+        <div class="glass-card" style="padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem; border-color: rgba(56, 189, 248, 0.3);">
+          <span style="font-size: 1.1rem;">🪙</span>
+          <span id="user-tokens" class="font-mono" style="font-size: 0.9rem; font-weight: 700; color: #38bdf8;">100</span>
+          <span style="font-size: 10px; color: #64748b; font-weight: 600;">FICHAS</span>
+        </div>
+        <button onclick="addTokens()" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 0.5rem 0.8rem; border-radius: 12px; font-size: 0.75rem; font-weight: 700; cursor: pointer;">
+          + Recargar
         </button>
-        <a href="#creadores" style="text-decoration: none;">
-          <button class="modern-btn bg-gradient-btn">
-            <span class="font-heading" style="display: block; padding: 0.6rem 1.25rem; background: #030712; border-radius: 15px; color: white; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;">
-              Modo Creador
-            </span>
-          </button>
-        </a>
       </div>
     </div>
   </header>
 
-  <!-- Hero & Camera -->
-  <main class="max-w-7xl mx-auto" style="padding: 3rem 2rem 6rem; display: flex; flex-direction: column; gap: 6rem; flex-grow: 1; position: relative; z-index: 10;">
+  <!-- Hero & Arcade Console -->
+  <main class="max-w-7xl mx-auto" style="padding: 2.5rem 2rem 6rem; display: flex; flex-direction: column; gap: 4rem; flex-grow: 1; position: relative; z-index: 10;">
     
     <section class="grid lg:grid-cols-12 gap-8 items-center">
       
@@ -179,338 +193,335 @@
       <div class="lg:col-span-6 flex flex-col gap-6">
         <div style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.35rem 0.85rem; background: rgba(56,189,248,0.08); border: 1px solid rgba(56,189,248,0.2); border-radius: 9999px; width: fit-content;">
           <span style="width: 6px; height: 6px; border-radius: 9999px; background-color: #38bdf8; box-shadow: 0 0 10px #38bdf8;"></span>
-          <span style="font-size: 11px; text-transform: uppercase; font-weight: 700; letter-spacing: 0.15em; color: #38bdf8;">Bóveda Digital Verificada</span>
+          <span style="font-size: 11px; text-transform: uppercase; font-weight: 700; letter-spacing: 0.15em; color: #38bdf8;">Centro de Juegos Aleatorios</span>
         </div>
         
-        <h1 class="font-heading" style="font-size: 3.25rem; font-weight: 700; line-height: 1.1; color: white; margin: 0;">
-          Desbloquea Activos <span class="text-gradient">Exclusivos en Tiempo Real.</span>
+        <h1 class="font-heading" style="font-size: 3rem; font-weight: 700; line-height: 1.1; color: white; margin: 0;">
+          Prueba tu Suerte <span class="text-gradient">en Varios Juegos.</span>
         </h1>
         
         <p style="color: #94a3b8; font-size: 0.95rem; line-height: 1.6; margin: 0;">
-          Ecosistema interactivo de coleccionables digitales. Liquidación e infraestructura directa mediante pagos procesados en Stripe Express.
+          Elige tu modalidad favorita: gira la ruleta cyberpunk, activa la máquina tragamonedas o abre el contenedor gacha clásico para coleccionar ítems raros.
         </p>
 
-        <!-- Tarjeta de ID Usuario -->
-        <div class="glass-card" style="padding: 1rem 1.25rem; display: flex; align-items: center; justify-content: space-between;">
-          <div class="flex items-center gap-4">
-            <div style="width: 2.25rem; height: 2.25rem; border-radius: 10px; background: rgba(56,189,248,0.1); border: 1px solid rgba(56,189,248,0.2); display: flex; align-items: center; justify-content: center; color: #38bdf8;">
-              🔑
-            </div>
-            <div>
-              <p style="font-size: 9px; text-transform: uppercase; letter-spacing: 0.15em; font-weight: 700; color: #64748b; margin: 0;">Billetera del Usuario</p>
-              <p id="user-id-display" class="font-mono" style="font-size: 0.8rem; color: #f1f5f9; font-weight: 600; margin: 0;">Cargando...</p>
-            </div>
-          </div>
-          <button onclick="copyUserId()" style="font-size: 11px; font-weight: 700; background: rgba(255,255,255,0.05); color: #38bdf8; padding: 0.5rem 0.85rem; border-radius: 10px; border: 1px solid rgba(56,189,248,0.2); cursor: pointer; transition: all 0.2s;">
-            Copiar ID
+        <!-- Navegación entre juegos -->
+        <div class="flex gap-3 flex-wrap">
+          <button id="tab-roulette" onclick="switchGame('roulette')" class="tab-btn active">
+            <span>🎡</span> Ruleta Cyber
+          </button>
+          <button id="tab-slots" onclick="switchGame('slots')" class="tab-btn">
+            <span>🎰</span> Tragamonedas
+          </button>
+          <button id="tab-gacha" onclick="switchGame('gacha')" class="tab-btn">
+            <span>📦</span> Cámara Gacha
           </button>
         </div>
       </div>
 
-      <!-- Cámara del Gacha -->
+      <!-- Consola Interactiva de Juegos -->
       <div class="lg:col-span-6 flex flex-col items-center">
-        <div class="glass-card" style="width: 100%; max-width: 30rem; padding: 2rem;">
+        <div class="glass-card" style="width: 100%; max-width: 32rem; padding: 2rem; display: flex; flex-direction: column; items-center; justify-content: center;">
           
-          <div id="gacha-screen" style="width: 100%; height: 20rem; background: #030712; border-radius: 18px; border: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1.5rem; text-align: center; position: relative; overflow: hidden; transition: all 0.5s;">
-            
-            <!-- Estado Inicial -->
-            <div id="state-idle" class="flex flex-col items-center gap-4">
-              <div style="width: 6rem; height: 6rem; border-radius: 9999px; background: rgba(56,189,248,0.05); border: 1px solid rgba(56,189,248,0.2); display: flex; align-items: center; justify-content: center; font-size: 2.25rem;">
-                📦
-              </div>
-              <div>
-                <h3 class="font-heading" style="font-size: 1.2rem; font-weight: 700; color: white; margin: 0;">Contenedor Sellado</h3>
-                <p style="font-size: 0.8rem; color: #64748b; margin-top: 0.25rem;">Presiona el botón inferior para abrir</p>
-              </div>
-            </div>
-
-            <!-- Animación de Giro -->
-            <div id="state-spinning" class="hidden flex-col items-center gap-4">
-              <div class="animate-spin" style="width: 4rem; height: 4rem; border-radius: 9999px; border: 3px solid rgba(56,189,248,0.2); border-top-color: #38bdf8;"></div>
-              <p class="animate-pulse font-heading" style="font-size: 0.8rem; font-weight: 700; color: #38bdf8; letter-spacing: 0.15em; text-transform: uppercase; margin: 0;">Generando Recompensa...</p>
-            </div>
-
-            <!-- Resultado -->
-            <div id="state-result" class="hidden flex-col items-center gap-3" style="width: 100%;">
-              <span id="result-badge" class="badge"></span>
-              <h3 id="result-title" class="font-heading" style="font-size: 1.75rem; font-weight: 700; color: white; margin: 0.5rem 0 0;"></h3>
-              <p id="result-desc" style="font-size: 0.8rem; color: #94a3b8; margin: 0;"></p>
+          <!-- 1. JUEGO: RULETA -->
+          <div id="game-roulette-container" class="flex flex-col items-center gap-4" style="width: 100%;">
+            <div style="position: relative; width: 260px; height: 260px; display: flex; items-center; justify-center;">
+              <!-- Marcador Superior -->
+              <div style="position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 12px solid transparent; border-right: 12px solid transparent; border-top: 20px solid #38bdf8; z-index: 20; filter: drop-shadow(0 2px 8px rgba(56,189,248,0.8));"></div>
               
-              <a id="result-download" href="#" target="_blank" style="display: none; text-decoration: none; font-size: 0.75rem; font-weight: 700; color: #030712; background: #38bdf8; padding: 0.6rem 1.2rem; border-radius: 10px; margin-top: 0.5rem;">
-                Descargar Certificado
-              </a>
+              <canvas id="roulette-canvas" width="260" height="260" style="border-radius: 9999px; box-shadow: 0 0 30px rgba(6,182,212,0.2); transition: transform 4s cubic-bezier(0.15, 0.9, 0.15, 1);"></canvas>
             </div>
+            <button id="spin-wheel-btn" onclick="spinWheel()" class="modern-btn bg-gradient-btn" style="width: 100%; margin-top: 1rem;">
+              <span class="font-heading" style="display: block; padding: 0.85rem; background: rgba(3, 7, 18, 0.4); backdrop-filter: blur(10px); color: white; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em;">
+                Girar Ruleta (10 Fichas)
+              </span>
+            </button>
           </div>
 
-          <input id="gacha-id-input" type="hidden" value="demo-gacha-id">
+          <!-- 2. JUEGO: TRAGAMONEDAS -->
+          <div id="game-slots-container" class="hidden flex-col items-center gap-6" style="width: 100%;">
+            <div class="flex gap-3 justify-center items-center" style="background: rgba(255,255,255,0.02); padding: 1.5rem; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); width: 100%;">
+              <div id="slot-1" class="slot-reel">💎</div>
+              <div id="slot-2" class="slot-reel">🚀</div>
+              <div id="slot-3" class="slot-reel">⚡</div>
+            </div>
+            <button id="spin-slots-btn" onclick="spinSlots()" class="modern-btn bg-gradient-btn" style="width: 100%;">
+              <span class="font-heading" style="display: block; padding: 0.85rem; background: rgba(3, 7, 18, 0.4); backdrop-filter: blur(10px); color: white; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em;">
+                Jugar Tragamonedas (10 Fichas)
+              </span>
+            </button>
+          </div>
 
-          <!-- Botón de Acción Principal -->
-          <button id="pull-btn" onclick="executePull()" class="modern-btn bg-gradient-btn" style="width: 100%; margin-top: 1.5rem;">
-            <span class="font-heading" style="display: block; padding: 1rem; background: rgba(3, 7, 18, 0.4); backdrop-filter: blur(10px); color: white; font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em;">
-              Obtener Entrada ($4.99 USD)
-            </span>
-          </button>
+          <!-- 3. JUEGO: GACHA -->
+          <div id="game-gacha-container" class="hidden flex-col items-center gap-4" style="width: 100%;">
+            <div id="gacha-box" style="width: 100%; height: 12rem; background: #030712; border-radius: 18px; border: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; align-items: center; justify-content: center;">
+              <div style="font-size: 3.5rem;" id="gacha-icon">📦</div>
+            </div>
+            <button id="pull-gacha-btn" onclick="executeGacha()" class="modern-btn bg-gradient-btn" style="width: 100%;">
+              <span class="font-heading" style="display: block; padding: 0.85rem; background: rgba(3, 7, 18, 0.4); backdrop-filter: blur(10px); color: white; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em;">
+                Abrir Cápsula (10 Fichas)
+              </span>
+            </button>
+          </div>
+
+          <!-- Visualizador de Resultado del Juego -->
+          <div id="game-result" class="hidden flex-col items-center gap-2" style="margin-top: 1.25rem; width: 100%; text-align: center;">
+            <span id="result-badge" class="badge"></span>
+            <h3 id="result-title" class="font-heading" style="font-size: 1.25rem; font-weight: 700; color: white; margin: 0.25rem 0 0;"></h3>
+            <p id="result-desc" style="font-size: 0.75rem; color: #94a3b8; margin: 0;"></p>
+          </div>
+
         </div>
       </div>
     </section>
 
-    <!-- Sección de Inventario Real -->
+    <!-- Bóveda de Inventario -->
     <section class="glass-card" style="padding: 2rem; display: flex; flex-direction: column; gap: 1.5rem;">
       <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 1rem;">
         <div>
           <h2 class="font-heading" style="font-size: 1.25rem; font-weight: 700; color: white; margin: 0;">Tu Bóveda Personal</h2>
-          <p style="font-size: 0.8rem; color: #64748b; margin: 0.25rem 0 0;">Objetos desbloqueados y guardados localmente</p>
+          <p style="font-size: 0.8rem; color: #64748b; margin: 0.25rem 0 0;">Historial de premios ganados en los juegos</p>
         </div>
-        <button onclick="loadInventory()" style="font-size: 0.75rem; font-weight: 700; background: rgba(255,255,255,0.05); color: #38bdf8; padding: 0.5rem 1rem; border-radius: 10px; border: 1px solid rgba(56,189,248,0.2); cursor: pointer;">
-          ↻ Actualizar
+        <button onclick="clearInventory()" style="font-size: 0.75rem; background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); padding: 0.4rem 0.8rem; border-radius: 8px; cursor: pointer;">
+          Vaciar
         </button>
       </div>
 
       <!-- Grid de Ítems -->
       <div id="inventory-grid" class="grid grid-cols-2 md:grid-cols-4" style="gap: 1rem;">
-        <p style="color: #64748b; font-size: 0.8rem; font-style: italic; grid-column: 1 / -1; margin: 0;">Tu inventario está vacío. Prueba suerte en el contenedor.</p>
-      </div>
-    </section>
-
-    <!-- Formulario para Creadores -->
-    <section id="creadores" class="glass-card" style="padding: 2.5rem 2rem; text-align: center; display: flex; flex-direction: column; gap: 1.5rem;">
-      <div style="max-width: 30rem; margin: 0 auto; display: flex; flex-direction: column; gap: 0.5rem;">
-        <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; font-weight: 700; color: #38bdf8;">Portal de Creadores</span>
-        <h2 class="font-heading" style="font-size: 1.75rem; font-weight: 700; color: white; margin: 0;">Conecta tu Cuenta Bancaria</h2>
-        <p style="color: #94a3b8; font-size: 0.85rem; margin: 0;">
-          Recibe directamente las ventas de tus drops a través del sistema bancario seguro de Stripe.
-        </p>
-      </div>
-
-      <div class="flex flex-col sm:flex-row gap-3" style="max-width: 26rem; margin: 0 auto; width: 100%;">
-        <input id="creator-email" type="email" placeholder="tu@email.com" class="input-modern">
-        <button onclick="connectBank()" class="modern-btn bg-gradient-btn" style="white-space: nowrap;">
-          <span class="font-heading" style="display: block; padding: 0.875rem 1.25rem; color: white; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">
-            Vincular
-          </span>
-        </button>
+        <p style="color: #64748b; font-size: 0.8rem; font-style: italic; grid-column: 1 / -1; margin: 0;">Tu inventario está vacío. Juega en la consola superior para ganar activos.</p>
       </div>
     </section>
   </main>
 
-  <!-- Modal Probabilidades -->
-  <div id="rates-modal" class="hidden" style="position: fixed; inset: 0; background: rgba(3,7,18,0.85); backdrop-filter: blur(16px); z-index: 50; display: flex; align-items: center; justify-content: center; padding: 1.5rem;">
-    <div class="glass-card" style="padding: 1.75rem; max-width: 24rem; width: 100%; display: flex; flex-direction: column; gap: 1.25rem;">
-      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 0.75rem;">
-        <h3 class="font-heading" style="font-size: 1.1rem; font-weight: 700; color: white; margin: 0;">Probabilidades de Caída</h3>
-        <button onclick="toggleModal(false)" style="background: none; border: none; color: #64748b; font-size: 1.2rem; cursor: pointer;">✕</button>
-      </div>
-      <div style="display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.8rem;">
-        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; border-radius: 12px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
-          <span class="badge badge-ssr">SSR</span>
-          <span style="color: #cbd5e1;">Mítico</span>
-          <span class="font-mono" style="color: #38bdf8; font-weight: 700;">5%</span>
-        </div>
-        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; border-radius: 12px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
-          <span class="badge badge-sr">SR</span>
-          <span style="color: #cbd5e1;">Raro</span>
-          <span class="font-mono" style="color: #38bdf8; font-weight: 700;">20%</span>
-        </div>
-        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; border-radius: 12px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
-          <span class="badge badge-r">R</span>
-          <span style="color: #cbd5e1;">Especial</span>
-          <span class="font-mono" style="color: #38bdf8; font-weight: 700;">35%</span>
-        </div>
-        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; border-radius: 12px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
-          <span class="badge badge-c">C</span>
-          <span style="color: #cbd5e1;">Común</span>
-          <span class="font-mono" style="color: #38bdf8; font-weight: 700;">40%</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <footer style="border-top: 1px solid rgba(255,255,255,0.05); padding: 2rem 0; text-align: center; font-size: 0.75rem; color: #64748b; position: relative; z-index: 10;">
-    © 2026 GachaPay Engine. Todos los derechos reservados.
+    © 2026 GachaPay Engine. Arcade Multijuego Interactivo.
   </footer>
 
-  <!-- Lógica Interactiva Full / Simulación & Conectividad API -->
   <script>
-    // 1. Manejo de Identificador Único de Usuario
-    let currentUserId = localStorage.getItem('gachapay_user_id');
-    if (!currentUserId) {
-      currentUserId = 'usr_' + Math.random().toString(36).substring(2, 11);
-      localStorage.setItem('gachapay_user_id', currentUserId);
-    }
-    document.getElementById('user-id-display').innerText = currentUserId;
+    // 1. Estado Global y Fichas
+    let tokens = parseInt(localStorage.getItem('gachapay_tokens') || '100');
+    document.getElementById('user-tokens').innerText = tokens;
 
-    // Configuración de Estilos según Rareza
+    function updateTokens(amount) {
+      tokens += amount;
+      localStorage.setItem('gachapay_tokens', tokens);
+      document.getElementById('user-tokens').innerText = tokens;
+    }
+
+    function addTokens() {
+      updateTokens(50);
+      alert('¡Has agregado +50 fichas a tu monedero!');
+    }
+
+    // Configuración de Rarezas
     const RARITIES = {
-      'SSR': { badgeClass: 'badge-ssr', glow: 'glow-cyan', border: 'rgba(6, 182, 212, 0.4)' },
-      'SR': { badgeClass: 'badge-sr', glow: 'glow-purple', border: 'rgba(168, 85, 247, 0.4)' },
-      'R': { badgeClass: 'badge-r', glow: 'glow-blue', border: 'rgba(59, 130, 246, 0.4)' },
-      'C': { badgeClass: 'badge-c', glow: 'glow-slate', border: 'rgba(148, 163, 184, 0.2)' }
+      'SSR': { badgeClass: 'badge-ssr', border: 'rgba(6, 182, 212, 0.4)' },
+      'SR': { badgeClass: 'badge-sr', border: 'rgba(168, 85, 247, 0.4)' },
+      'R': { badgeClass: 'badge-r', border: 'rgba(59, 130, 246, 0.4)' },
+      'C': { badgeClass: 'badge-c', border: 'rgba(148, 163, 184, 0.2)' }
     };
 
-    // Colección de ítems para simulación autónoma si no hay backend activo
-    const DEMO_ITEMS = [
-      { rarity: 'SSR', name: 'Cyber Core Alpha 3D', desc: 'Edición mística limitada', modelUrl: '#' },
-      { rarity: 'SR', name: 'Quantum Key Fragment', desc: 'Llave de acceso de alta velocidad', modelUrl: '#' },
-      { rarity: 'R', name: 'Neon Pass Voucher', desc: 'Pase con privilegios especiales', modelUrl: '#' },
-      { rarity: 'C', name: 'Data Crystal Basic', desc: 'Unidad de almacenamiento común', modelUrl: '#' }
+    // 2. Control de Pestañas
+    function switchGame(gameType) {
+      ['roulette', 'slots', 'gacha'].forEach(g => {
+        document.getElementById(`game-${g}-container`).classList.add('hidden');
+        document.getElementById(`game-${g}-container`).classList.remove('flex');
+        document.getElementById(`tab-${g}`).classList.remove('active');
+      });
+
+      document.getElementById(`game-${gameType}-container`).classList.remove('hidden');
+      document.getElementById(`game-${gameType}-container`).classList.add('flex');
+      document.getElementById(`tab-${gameType}`).classList.add('active');
+      
+      document.getElementById('game-result').classList.add('hidden');
+    }
+
+    // 3. JUEGO 1: RULETA (Canvas)
+    const canvas = document.getElementById('roulette-canvas');
+    const ctx = canvas.getContext('2d');
+    const sectors = [
+      { color: '#06b6d4', label: 'SSR Core', rarity: 'SSR' },
+      { color: '#3b82f6', label: 'R Voucher', rarity: 'R' },
+      { color: '#94a3b8', label: 'C Data', rarity: 'C' },
+      { color: '#a855f7', label: 'SR Key', rarity: 'SR' },
+      { color: '#94a3b8', label: 'C Data', rarity: 'C' },
+      { color: '#3b82f6', label: 'R Pass', rarity: 'R' }
     ];
 
-    // Algoritmo de extracción probabilística
-    function getRandomItem() {
-      const rand = Math.random() * 100;
-      if (rand < 5) return DEMO_ITEMS[0];   // 5% SSR
-      if (rand < 25) return DEMO_ITEMS[1];  // 20% SR
-      if (rand < 60) return DEMO_ITEMS[2];  // 35% R
-      return DEMO_ITEMS[3];                 // 40% C
+    let currentRotation = 0;
+    let isSpinning = false;
+
+    function drawWheel() {
+      const numSectors = sectors.length;
+      const arc = (2 * Math.PI) / numSectors;
+      const radius = canvas.width / 2;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      sectors.forEach((sector, i) => {
+        const angle = i * arc;
+        ctx.beginPath();
+        ctx.fillStyle = sector.color;
+        ctx.moveTo(radius, radius);
+        ctx.arc(radius, radius, radius, angle, angle + arc);
+        ctx.lineTo(radius, radius);
+        ctx.fill();
+
+        // Texto
+        ctx.save();
+        ctx.translate(radius, radius);
+        ctx.rotate(angle + arc / 2);
+        ctx.textAlign = "right";
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "bold 12px 'Space Grotesk', sans-serif";
+        ctx.fillText(sector.label, radius - 15, 5);
+        ctx.restore();
+      });
     }
 
-    // 2. Función Principal de Apertura de Cámara (Ejecución)
-    async function executePull() {
-      const btn = document.getElementById('pull-btn');
-      const screen = document.getElementById('gacha-screen');
+    drawWheel();
 
-      btn.disabled = true;
-      document.getElementById('state-idle').classList.add('hidden');
-      document.getElementById('state-result').classList.add('hidden');
-      document.getElementById('state-spinning').classList.remove('hidden');
-      document.getElementById('state-spinning').classList.add('flex');
-
-      let wonItem = null;
-
-      try {
-        // Intenta conectar con tu servidor local o de producción
-        const res = await fetch('/api/gacha/pull', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ gachaId: 'demo-gacha-id', userId: currentUserId })
-        });
-
-        if (res.ok) {
-          const data = await res.json();
-          wonItem = data.wonItem;
-        } else {
-          throw new Error('Sin conexión con servidor API, ejecutando simulación local.');
-        }
-      } catch (e) {
-        // Fallback: Si no hay Backend responde con el motor interno
-        await new Promise(r => setTimeout(r, 1200)); // Efecto de carga
-        wonItem = getRandomItem();
-        saveLocalInventory(wonItem);
-      }
-
-      // Render de Resultado
-      const config = RARITIES[wonItem.rarity] || RARITIES['C'];
-      screen.className = `glass-card ${config.glow}`;
-      screen.style.borderColor = config.border;
-
-      const badge = document.getElementById('result-badge');
-      badge.className = `badge ${config.badgeClass}`;
-      badge.innerText = wonItem.rarity;
-
-      document.getElementById('result-title').innerText = wonItem.name;
-      document.getElementById('result-desc').innerText = wonItem.desc || 'Activo verificado en bóveda.';
-
-      const downloadBtn = document.getElementById('result-download');
-      if (wonItem.modelUrl) {
-        downloadBtn.href = wonItem.modelUrl;
-        downloadBtn.style.display = 'inline-block';
-      } else {
-        downloadBtn.style.display = 'none';
-      }
-
-      document.getElementById('state-spinning').classList.add('hidden');
-      document.getElementById('state-spinning').classList.remove('flex');
+    function spinWheel() {
+      if (isSpinning) return;
+      if (tokens < 10) return alert('No tienes suficientes fichas.');
       
-      const resultContainer = document.getElementById('state-result');
-      resultContainer.classList.remove('hidden');
-      resultContainer.classList.add('flex', 'animate-reveal');
+      updateTokens(-10);
+      isSpinning = true;
+      document.getElementById('spin-wheel-btn').disabled = true;
+      document.getElementById('game-result').classList.add('hidden');
 
-      btn.disabled = false;
-      loadInventory();
+      const extraRounds = 5 + Math.floor(Math.random() * 5);
+      const selectedIndex = Math.floor(Math.random() * sectors.length);
+      const sectorArc = 360 / sectors.length;
+      
+      // Cálculo de ángulo final
+      const targetDegree = (extraRounds * 360) + (360 - (selectedIndex * sectorArc) - (sectorArc / 2));
+      currentRotation += targetDegree;
+
+      canvas.style.transform = `rotate(${currentRotation}deg)`;
+
+      setTimeout(() => {
+        isSpinning = false;
+        document.getElementById('spin-wheel-btn').disabled = false;
+        const won = sectors[selectedIndex];
+        showResult(won.rarity, `Premio de Ruleta: ${won.label}`, 'Obtenido mediante giro de Ruleta Cyber.');
+      }, 4000);
     }
 
-    // 3. Sistema de Inventario
-    function saveLocalInventory(item) {
-      let inv = JSON.parse(localStorage.getItem('gachapay_inventory') || '[]');
-      inv.unshift({ item, date: new Date().toISOString() });
-      localStorage.setItem('gachapay_inventory', JSON.stringify(inv));
-    }
+    // 4. JUEGO 2: TRAGAMONEDAS (Slots)
+    const slotIcons = ['💎', '🚀', '⚡', '🗝️', '🔮'];
+    
+    function spinSlots() {
+      if (tokens < 10) return alert('No tienes suficientes fichas.');
+      updateTokens(-10);
 
-    async function loadInventory() {
-      const container = document.getElementById('inventory-grid');
-      let items = [];
+      document.getElementById('spin-slots-btn').disabled = true;
+      document.getElementById('game-result').classList.add('hidden');
 
-      try {
-        const res = await fetch(`/api/inventory/${currentUserId}`);
-        if (res.ok) {
-          items = await res.json();
-        } else {
-          throw new Error();
+      let spins = 0;
+      const interval = setInterval(() => {
+        document.getElementById('slot-1').innerText = slotIcons[Math.floor(Math.random() * slotIcons.length)];
+        document.getElementById('slot-2').innerText = slotIcons[Math.floor(Math.random() * slotIcons.length)];
+        document.getElementById('slot-3').innerText = slotIcons[Math.floor(Math.random() * slotIcons.length)];
+        spins++;
+
+        if (spins > 15) {
+          clearInterval(interval);
+          document.getElementById('spin-slots-btn').disabled = false;
+
+          const s1 = document.getElementById('slot-1').innerText;
+          const s2 = document.getElementById('slot-2').innerText;
+          const s3 = document.getElementById('slot-3').innerText;
+
+          if (s1 === s2 && s2 === s3) {
+            showResult('SSR', '¡JACKPOT TRIPLE!', 'Combinación perfecta conseguida.');
+          } else if (s1 === s2 || s2 === s3 || s1 === s3) {
+            showResult('SR', 'Par Coincidente', 'Combinación doble conseguida.');
+          } else {
+            showResult('C', 'Fragmento Común', 'Sigue intentándolo.');
+          }
         }
-      } catch (e) {
-        // Carga de inventario local en caso de no tener backend activo
-        items = JSON.parse(localStorage.getItem('gachapay_inventory') || '[]');
-      }
+      }, 100);
+    }
 
-      if (!Array.isArray(items) || items.length === 0) {
-        container.innerHTML = '<p style="color: #64748b; font-size: 0.8rem; font-style: italic; grid-column: 1 / -1; margin: 0;">Tu inventario está vacío. Prueba suerte en el contenedor.</p>';
+    // 5. JUEGO 3: CÁMARA GACHA
+    function executeGacha() {
+      if (tokens < 10) return alert('No tienes suficientes fichas.');
+      updateTokens(-10);
+
+      const btn = document.getElementById('pull-gacha-btn');
+      const box = document.getElementById('gacha-box');
+      btn.disabled = true;
+      document.getElementById('game-result').classList.add('hidden');
+
+      box.style.transform = 'scale(0.95)';
+      
+      setTimeout(() => {
+        box.style.transform = 'scale(1)';
+        btn.disabled = false;
+
+        const rand = Math.random() * 100;
+        let item = { rarity: 'C', name: 'Cápsula Básica' };
+        if (rand < 10) item = { rarity: 'SSR', name: 'Núcleo Estelar Gacha' };
+        else if (rand < 35) item = { rarity: 'SR', name: 'Módulo de Datos Raro' };
+        else if (rand < 65) item = { rarity: 'R', name: 'Chip de Acceso Especial' };
+
+        showResult(item.rarity, item.name, 'Extracción exitosa del contenedor.');
+      }, 1000);
+    }
+
+    // 6. Mostrar Resultado e Inventario
+    function showResult(rarity, title, desc) {
+      const config = RARITIES[rarity] || RARITIES['C'];
+      const badge = document.getElementById('result-badge');
+      
+      badge.className = `badge ${config.badgeClass}`;
+      badge.innerText = rarity;
+
+      document.getElementById('result-title').innerText = title;
+      document.getElementById('result-desc').innerText = desc;
+
+      const container = document.getElementById('game-result');
+      container.classList.remove('hidden');
+      container.classList.add('flex', 'animate-reveal');
+
+      saveInventoryItem({ rarity, name: title });
+    }
+
+    function saveInventoryItem(item) {
+      let inv = JSON.parse(localStorage.getItem('gachapay_arcade_inv') || '[]');
+      inv.unshift(item);
+      localStorage.setItem('gachapay_arcade_inv', JSON.stringify(inv));
+      renderInventory();
+    }
+
+    function renderInventory() {
+      const container = document.getElementById('inventory-grid');
+      let items = JSON.parse(localStorage.getItem('gachapay_arcade_inv') || '[]');
+
+      if (items.length === 0) {
+        container.innerHTML = '<p style="color: #64748b; font-size: 0.8rem; font-style: italic; grid-column: 1 / -1; margin: 0;">Tu inventario está vacío. Juega en la consola superior para ganar activos.</p>';
         return;
       }
 
-      container.innerHTML = items.map(record => {
-        const item = record.item || record;
+      container.innerHTML = items.map(item => {
         const config = RARITIES[item.rarity] || RARITIES['C'];
         return `
-          <div style="background: rgba(255,255,255,0.02); border: 1px solid ${config.border}; padding: 1rem; border-radius: 16px; display: flex; flex-direction: column; justify-content: space-between; gap: 0.75rem;">
+          <div style="background: rgba(255,255,255,0.02); border: 1px solid ${config.border}; padding: 1rem; border-radius: 16px; display: flex; flex-direction: column; gap: 0.5rem;">
             <span class="badge ${config.badgeClass}" style="align-self: flex-start;">${item.rarity}</span>
             <p class="font-heading" style="font-size: 0.85rem; color: white; font-weight: 700; margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${item.name}</p>
-            ${item.modelUrl ? `<a href="${item.modelUrl}" target="_blank" style="font-size: 10px; font-weight: 700; color: #38bdf8; text-decoration: none;">Descargar ↗</a>` : ''}
           </div>
         `;
       }).join('');
     }
 
-    // 4. Conexión Creadores / Stripe
-    async function connectBank() {
-      const email = document.getElementById('creator-email').value;
-      if (!email) return alert('Por favor ingresa un correo válido.');
-      
-      try {
-        const res = await fetch('/api/creators/connect', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email })
-        });
-        const data = await res.json();
-        if (data.url) {
-          window.location.href = data.url;
-        } else {
-          alert('Conexión simulada con éxito para: ' + email);
-        }
-      } catch (e) {
-        alert('Modo Simulación: Registro enviado correctamente para ' + email);
-      }
+    function clearInventory() {
+      localStorage.removeItem('gachapay_arcade_inv');
+      renderInventory();
     }
 
-    // 5. Utilidades
-    function toggleModal(show) {
-      const modal = document.getElementById('rates-modal');
-      if (show) {
-        modal.classList.remove('hidden');
-        modal.style.display = 'flex';
-      } else {
-        modal.classList.add('hidden');
-        modal.style.display = 'none';
-      }
-    }
-
-    function copyUserId() {
-      navigator.clipboard.writeText(currentUserId);
-      alert('ID copiado al portapapeles');
-    }
-
-    // Inicializar Inventario
-    loadInventory();
+    // Inicialización
+    renderInventory();
   </script>
 </body>
 </html>
