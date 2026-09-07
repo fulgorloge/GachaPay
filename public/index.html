@@ -26,85 +26,90 @@
       </p>
     </section>
 
-    <!-- Sección de Juegos y Cómo Funcionan -->
+    <!-- Sección de Simulador Interactivo de Juegos -->
     <section class="flex flex-col gap-8">
       <div class="text-center">
-        <h2 class="text-xs font-bold uppercase tracking-widest text-amber-400 mb-2">Catálogo Exclusivo</h2>
-        <h3 class="text-2xl sm:text-3xl font-black text-white">Los 10 Tipos de Juegos y su Mecánica</h3>
+        <h2 class="text-xs font-bold uppercase tracking-widest text-amber-400 mb-2">Demostración en Vivo</h2>
+        <h3 class="text-2xl sm:text-3xl font-black text-white">Haz clic en un juego para probarlo</h3>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <!-- Tarjetas de Juegos Interactivos -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         
-        <!-- Juego 1 -->
-        <div class="bg-slate-900/50 border border-slate-800 p-5 rounded-2xl flex flex-col gap-2">
-          <span class="text-2xl">🎡</span>
-          <h4 class="font-bold text-white text-base">1. Ruleta de Neón</h4>
-          <p class="text-xs text-slate-400 leading-relaxed">Una rueda futurista con multiplicadores brillantes donde la bola láser define la rareza del premio (C a SSR).</p>
+        <div onclick="selectGame('ROULETTE', 'Ruleta de Neón', '🎡')" class="game-card bg-slate-900/50 hover:bg-slate-800/80 border border-slate-800 hover:border-amber-500/50 p-4 rounded-2xl flex flex-col items-center text-center gap-2 cursor-pointer transition">
+          <span class="text-3xl">🎡</span>
+          <h4 class="font-bold text-white text-sm">Ruleta de Neón</h4>
+          <span class="text-[10px] text-amber-400 font-semibold uppercase">Probar juego &rarr;</span>
         </div>
 
-        <!-- Juego 2 -->
-        <div class="bg-slate-900/50 border border-slate-800 p-5 rounded-2xl flex flex-col gap-2">
-          <span class="text-2xl">🎁</span>
-          <h4 class="font-bold text-white text-base">2. Cofre del Tesoro Arcano</h4>
-          <p class="text-xs text-slate-400 leading-relaxed">Sistemas de cofres sellados con magia que se rompen progresivamente para revelar botines ocultos.</p>
+        <div onclick="selectGame('CHEST', 'Cofre del Tesoro Arcano', '🎁')" class="game-card bg-slate-900/50 hover:bg-slate-800/80 border border-slate-800 hover:border-amber-500/50 p-4 rounded-2xl flex flex-col items-center text-center gap-2 cursor-pointer transition">
+          <span class="text-3xl">🎁</span>
+          <h4 class="font-bold text-white text-sm">Cofre Arcano</h4>
+          <span class="text-[10px] text-amber-400 font-semibold uppercase">Probar juego &rarr;</span>
         </div>
 
-        <!-- Juego 3 -->
-        <div class="bg-slate-900/50 border border-slate-800 p-5 rounded-2xl flex flex-col gap-2">
-          <span class="text-2xl">🎟️</span>
-          <h4 class="font-bold text-white text-base">3. Raspa y Gana de Lujo</h4>
-          <p class="text-xs text-slate-400 leading-relaxed">Tarjeta digital con acabado dorado que simula el movimiento táctil de raspar para descubrir recompensas.</p>
+        <div onclick="selectGame('SCRATCH', 'Raspa y Gana de Lujo', '🎟️')" class="game-card bg-slate-900/50 hover:bg-slate-800/80 border border-slate-800 hover:border-amber-500/50 p-4 rounded-2xl flex flex-col items-center text-center gap-2 cursor-pointer transition">
+          <span class="text-3xl">🎟️</span>
+          <h4 class="font-bold text-white text-sm">Raspa y Gana</h4>
+          <span class="text-[10px] text-amber-400 font-semibold uppercase">Probar juego &rarr;</span>
         </div>
 
-        <!-- Juego 4 -->
-        <div class="bg-slate-900/50 border border-slate-800 p-5 rounded-2xl flex flex-col gap-2">
-          <span class="text-2xl">🎰</span>
-          <h4 class="font-bold text-white text-base">4. Tragamonedas Clásico</h4>
-          <p class="text-xs text-slate-400 leading-relaxed">La tradicional máquina de símbolos místicos con palanca virtual y efectos visuales arcade.</p>
+        <div onclick="selectGame('SLOTS', 'Tragamonedas Clásico', '🎰')" class="game-card bg-slate-900/50 hover:bg-slate-800/80 border border-slate-800 hover:border-amber-500/50 p-4 rounded-2xl flex flex-col items-center text-center gap-2 cursor-pointer transition">
+          <span class="text-3xl">🎰</span>
+          <h4 class="font-bold text-white text-sm">Tragamonedas</h4>
+          <span class="text-[10px] text-amber-400 font-semibold uppercase">Probar juego &rarr;</span>
         </div>
 
-        <!-- Juego 5 -->
-        <div class="bg-slate-900/50 border border-slate-800 p-5 rounded-2xl flex flex-col gap-2">
-          <span class="text-2xl">🔮</span>
-          <h4 class="font-bold text-white text-base">5. Esfera de Cristal Adivinatoria</h4>
-          <p class="text-xs text-slate-400 leading-relaxed">Una esfera flotante que gira y revela premios a través de destellos estelares y energía mística.</p>
+        <div onclick="selectGame('CRYSTAL', 'Esfera de Cristal Adivinatoria', '🔮')" class="game-card bg-slate-900/50 hover:bg-slate-800/80 border border-slate-800 hover:border-amber-500/50 p-4 rounded-2xl flex flex-col items-center text-center gap-2 cursor-pointer transition">
+          <span class="text-3xl">🔮</span>
+          <h4 class="font-bold text-white text-sm">Esfera Mística</h4>
+          <span class="text-[10px] text-amber-400 font-semibold uppercase">Probar juego &rarr;</span>
         </div>
 
-        <!-- Juego 6 -->
-        <div class="bg-slate-900/50 border border-slate-800 p-5 rounded-2xl flex flex-col gap-2">
-          <span class="text-2xl">🔲</span>
-          <h4 class="font-bold text-white text-base">6. Lotería de Píxeles</h4>
-          <p class="text-xs text-slate-400 leading-relaxed">Cuadrícula interactiva de números aleatorios donde el usuario selecciona casillas para ganar al instante.</p>
+        <div onclick="selectGame('LOTTO', 'Lotería de Píxeles', '🔲')" class="game-card bg-slate-900/50 hover:bg-slate-800/80 border border-slate-800 hover:border-amber-500/50 p-4 rounded-2xl flex flex-col items-center text-center gap-2 cursor-pointer transition">
+          <span class="text-3xl">🔲</span>
+          <h4 class="font-bold text-white text-sm">Lotería Píxel</h4>
+          <span class="text-[10px] text-amber-400 font-semibold uppercase">Probar juego &rarr;</span>
         </div>
 
-        <!-- Juego 7 -->
-        <div class="bg-slate-900/50 border border-slate-800 p-5 rounded-2xl flex flex-col gap-2">
-          <span class="text-2xl">⚔️</span>
-          <h4 class="font-bold text-white text-base">7. Piedra Papel o Tijera Épico</h4>
-          <p class="text-xs text-slate-400 leading-relaxed">Duelo rápido contra la máquina donde victorias consecutivas escalan la rareza del botín final.</p>
+        <div onclick="selectGame('RPS', 'Piedra Papel o Tijera Épico', '⚔️')" class="game-card bg-slate-900/50 hover:bg-slate-800/80 border border-slate-800 hover:border-amber-500/50 p-4 rounded-2xl flex flex-col items-center text-center gap-2 cursor-pointer transition">
+          <span class="text-3xl">⚔️</span>
+          <h4 class="font-bold text-white text-sm">Piedra Papel Tijera</h4>
+          <span class="text-[10px] text-amber-400 font-semibold uppercase">Probar juego &rarr;</span>
         </div>
 
-        <!-- Juego 8 -->
-        <div class="bg-slate-900/50 border border-slate-800 p-5 rounded-2xl flex flex-col gap-2">
-          <span class="text-2xl">📍</span>
-          <h4 class="font-bold text-white text-base">8. Plinko de la Suerte</h4>
-          <p class="text-xs text-slate-400 leading-relaxed">Tabla vertical donde una ficha dorada cae rebotando por clavos luminosos hasta caer en casillas de premios.</p>
+        <div onclick="selectGame('PLINKO', 'Plinko de la Suerte', '📍')" class="game-card bg-slate-900/50 hover:bg-slate-800/80 border border-slate-800 hover:border-amber-500/50 p-4 rounded-2xl flex flex-col items-center text-center gap-2 cursor-pointer transition">
+          <span class="text-3xl">📍</span>
+          <h4 class="font-bold text-white text-sm">Plinko Suerte</h4>
+          <span class="text-[10px] text-amber-400 font-semibold uppercase">Probar juego &rarr;</span>
         </div>
 
-        <!-- Juego 9 -->
-        <div class="bg-slate-900/50 border border-slate-800 p-5 rounded-2xl flex flex-col gap-2">
-          <span class="text-2xl">🃏</span>
-          <h4 class="font-bold text-white text-base">9. Torre de Cartas</h4>
-          <p class="text-xs text-slate-400 leading-relaxed">Selección de cartas boca abajo donde avanzas piso por piso arriesgando tu acumulación por premios mayores.</p>
+        <div onclick="selectGame('TOWER', 'Torre de Cartas', '🃏')" class="game-card bg-slate-900/50 hover:bg-slate-800/80 border border-slate-800 hover:border-amber-500/50 p-4 rounded-2xl flex flex-col items-center text-center gap-2 cursor-pointer transition">
+          <span class="text-3xl">🃏</span>
+          <h4 class="font-bold text-white text-sm">Torre Cartas</h4>
+          <span class="text-[10px] text-amber-400 font-semibold uppercase">Probar juego &rarr;</span>
         </div>
 
-        <!-- Juego 10 -->
-        <div class="bg-slate-900/50 border border-slate-800 p-5 rounded-2xl flex flex-col gap-2 sm:col-span-2 lg:col-span-1">
-          <span class="text-2xl">🪙</span>
-          <h4 class="font-bold text-white text-base">10. Lanza-Monedas Cuántico</h4>
-          <p class="text-xs text-slate-400 leading-relaxed">Moneda digital de alta gama con efectos de gravedad cero antes de dictar un multiplicador crítico.</p>
+        <div onclick="selectGame('COIN', 'Lanza-Monedas Cuántico', '🪙')" class="game-card bg-slate-900/50 hover:bg-slate-800/80 border border-slate-800 hover:border-amber-500/50 p-4 rounded-2xl flex flex-col items-center text-center gap-2 cursor-pointer transition sm:col-span-2 lg:col-span-1">
+          <span class="text-3xl">🪙</span>
+          <h4 class="font-bold text-white text-sm">Lanza Moneda</h4>
+          <span class="text-[10px] text-amber-400 font-semibold uppercase">Probar juego &rarr;</span>
         </div>
 
+      </div>
+
+      <!-- Consola de Prueba Interactiva -->
+      <div id="simulatorBox" class="max-w-md w-full mx-auto bg-slate-900 border border-amber-500/30 rounded-2xl p-6 shadow-2xl text-center flex flex-col gap-4">
+        <h4 id="simTitle" class="text-sm uppercase font-bold text-amber-400">Selecciona un juego arriba para probarlo</h4>
+        
+        <div id="simScreen" class="bg-slate-950 border border-slate-800 rounded-xl p-8 flex flex-col items-center justify-center min-h-[140px]">
+          <span id="simIcon" class="text-4xl mb-2">🕹️</span>
+          <p id="simDesc" class="text-xs text-slate-300">Haz una tirada de prueba gratuita para ver la animación y el premio resultante.</p>
+        </div>
+
+        <button id="simBtn" onclick="runSimulation()" class="py-3 bg-amber-500 hover:bg-amber-400 text-black font-black rounded-xl transition text-sm shadow-lg shadow-amber-500/10 hidden">
+          ¡Simular Tirada Gratis!
+        </button>
       </div>
     </section>
 
@@ -114,7 +119,7 @@
       
       <!-- Paso 1 -->
       <div id="creatorSetup" class="flex flex-col gap-4">
-        <label class="text-xs font-bold uppercase tracking-wider text-slate-400">1. Tu perfil y selección de juego</label>
+        <label class="text-xs font-bold uppercase tracking-wider text-slate-400">1. Tu perfil y selección de juego oficial</label>
         <input type="text" id="creatorName" placeholder="Tu Nombre / Canal" class="p-3 bg-slate-950 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-amber-500">
         <input type="text" id="creatorSlug" placeholder="URL única (ej: tu-nombre)" class="p-3 bg-slate-950 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-amber-500">
         
@@ -165,9 +170,43 @@
 
   <script>
     let currentCreatorId = null;
+    let activeSimGame = { type: '', name: '', icon: '' };
 
     function scrollToCreator() {
       document.getElementById('creatorSection').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function selectGame(type, name, icon) {
+      activeSimGame = { type, name, icon };
+      document.getElementById('simTitle').innerText = `Probando: ${name}`;
+      document.getElementById('simIcon').innerText = icon;
+      document.getElementById('simDesc').innerText = `Listo para jugar a ${name}. Presiona el botón para realizar una simulación.`;
+      document.getElementById('simBtn').classList.remove('hidden');
+    }
+
+    function runSimulation() {
+      const btn = document.getElementById('simBtn');
+      const desc = document.getElementById('simDesc');
+      const icon = document.getElementById('simIcon');
+
+      btn.disabled = true;
+      btn.innerText = 'Ejecutando simulación...';
+      icon.classList.add('animate-spin');
+
+      setTimeout(() => {
+        icon.classList.remove('animate-spin');
+        const rarities = [
+          { name: 'Común: Wallpaper de Prueba', rarity: 'C' },
+          { name: 'Raro: Pack de Stickers', rarity: 'R' },
+          { name: 'Super Raro: Video Exclusivo HD', rarity: 'SR' },
+          { name: 'Ultra Raro (SSR): ¡Acceso VIP Total!', rarity: 'SSR' }
+        ];
+        const won = rarities[Math.floor(Math.random() * rarities.length)];
+        
+        desc.innerHTML = `<strong class="text-amber-400 font-black">¡Has ganado (${won.rarity})!</strong><br><span class="text-white">${won.name}</span>`;
+        btn.disabled = false;
+        btn.innerText = '¡Probar otra vez!';
+      }, 1200);
     }
 
     async function createCreator() {
