@@ -3,103 +3,95 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GachaPay - Luxury Experience</title>
+  <title>GachaPay - Multijuego Creator Hub</title>
   <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen p-4 sm:p-8 flex flex-col items-center">
+
+  <div class="max-w-xl w-full bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl">
+    <h1 class="text-2xl font-black text-amber-400 mb-4 text-center">GachaPay Creator Hub</h1>
+    
+    <!-- Formulario para Crear Perfil Anónimo -->
+    <div id="creatorSetup" class="flex flex-col gap-4">
+      <h2 class="text-sm font-bold uppercase tracking-wider text-slate-400">1. Crea tu perfil y elige tu minijuego</h2>
+      <input type="text" id=" creatorName" placeholder="Tu Nombre / Canal" class="p-3 bg-slate-950 border border-slate-800 rounded-xl text-sm">
+      <input type="text" id="creatorSlug" placeholder="URL única (ej: tu-nombre)" class="p-3 bg-slate-950 border border-slate-800 rounded-xl text-sm">
+      
+      <select id="gameTypeSelect" class="p-3 bg-slate-950 border border-slate-800 rounded-xl text-sm text-slate-300">
+        <option value="ROULETTE">1. Ruleta de Neón</option>
+        <option value="CHEST">2. Cofre del Tesoro Arcano</option>
+        <option value="SCRATCH">3. Raspa y Gana de Lujo</option>
+        <option value="SLOTS">4. Tragamonedas Clásico</option>
+        <option value="CRYSTAL">5. Esfera de Cristal Adivinatoria</option>
+        <option value="LOTTO">6. Lotería de Píxeles</option>
+        <option value="RPS">7. Piedra Papel o Tijera Épico</option>
+        <option value="PLINKO">8. Plinko de la Suerte</option>
+        <option value="TOWER">9. Torre de Cartas</option>
+        <option value="COIN">10. Lanza-Monedas Cuántico</option>
+      </select>
+
+      <button onclick="createCreator()" class="py-3 bg-amber-500 hover:bg-amber-400 text-black font-black rounded-xl transition">Crear mi Link Independiente</button>
+    </div>
+
+    <!-- Panel de Gestión (Oculto inicialmente) -->
+    <div id="dashboard" class="hidden flex flex-col gap-4 mt-6 border-t border-slate-800 pt-6">
+      <h2 class="text-sm font-bold uppercase tracking-wider text-amber-400">¡Tu link está listo para compartir!</h2>
+      <input type="text" id="shareLink" readonly class="p-3 bg-slate-950 border border-slate-800 rounded-xl text-xs text-amber-200">
+      
+      <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mt-4">2. Agrega Premios Multimedia (Foto, Video, Archivo)</h3>
+      <input type="text" id="rewardName" placeholder="Nombre del Premio (Ej: Wallpaper Exclusivo)" class="p-3 bg-slate-950 border border-slate-800 rounded-xl text-sm">
+      <select id="rewardRarity" class="p-3 bg-slate-950 border border-slate-800 rounded-xl text-sm">
+        <option value="C">Común (C)</option>
+        <option value="R">Raro (R)</option>
+        <option value="SR">Super Raro (SR)</option>
+        <option value="SSR">Ultra Raro (SSR)</option>
+      </select>
+      <input type="text" id="mediaUrl" placeholder="URL del Archivo, Foto o Video" class="p-3 bg-slate-950 border border-slate-800 rounded-xl text-sm">
+      
+      <button onclick="addReward()" class="py-3 bg-slate-800 hover:bg-slate-700 font-bold rounded-xl text-sm">Añadir Premio al Juego</button>
+    </div>
+  </div>
+
   <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            gold: {
-              400: '#FBBF24',
-              500: '#F59E0B',
-              600: '#D97706',
-            }
-          }
-        }
+    let currentCreatorId = null;
+
+    async function createCreator() {
+      const name = document.getElementById('creatorName').value;
+      const slug = document.getElementById('creatorSlug').value;
+      const gameType = document.getElementById('gameTypeSelect').value;
+
+      const res = await fetch('/api/creators', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, slug, gameType })
+      });
+      const data = await res.json();
+      if(data.id) {
+        currentCreatorId = data.id;
+        document.getElementById('creatorSetup').classList.add('hidden');
+        document.getElementById('dashboard').classList.remove('hidden');
+        document.getElementById('shareLink').value = `${window.location.origin}/play.html?c=${slug}`;
+      } else {
+        alert(data.error);
+      }
+    }
+
+    async function addReward() {
+      const name = document.getElementById('rewardName').value;
+      const rarity = document.getElementById('rewardRarity').value;
+      const mediaUrl = document.getElementById('mediaUrl').value;
+
+      const res = await fetch(`/api/creators/${currentCreatorId}/rewards`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, rarity, mediaUrl, mediaType: 'MEDIA' })
+      });
+      if(res.ok) {
+        alert('¡Premio agregado con éxito!');
+        document.getElementById('rewardName').value = '';
+        document.getElementById('mediaUrl').value = '';
       }
     }
   </script>
-  <style>
-    .perspective-1000 { perspective: 1000px; }
-    .transform-style-3d { transform-style: preserve-3d; }
-    .backface-hidden { backface-visibility: hidden; }
-    .rotate-y-180 { transform: rotateY(180deg); }
-    
-    .glow-c { box-shadow: 0 0 15px rgba(107, 114, 128, 0.3); }
-    .glow-r { box-shadow: 0 0 20px rgba(59, 130, 246, 0.4); }
-    .glow-sr { box-shadow: 0 0 25px rgba(168, 85, 247, 0.5); }
-    .glow-ssr { box-shadow: 0 0 35px rgba(245, 158, 11, 0.8); }
-    
-    @keyframes customSpin {
-      0% { transform: rotate(0deg) scale(1); }
-      50% { transform: rotate(180deg) scale(1.1); }
-      100% { transform: rotate(360deg) scale(1); }
-    }
-    .animate-spin-custom { animation: customSpin 0.8s infinite linear; }
-  </style>
-</head>
-<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col justify-between selection:bg-amber-500 selection:text-black">
-
-  <header class="border-b border-slate-800/80 bg-slate-900/50 backdrop-blur-md sticky top-0 z-50 px-4 sm:px-6 py-4 flex flex-col sm:flex-row justify-between items-center gap-2">
-    <div class="flex items-center gap-2">
-      <span class="text-xl sm:text-2xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-amber-600">GACHAPAY</span>
-    </div>
-    <div class="flex items-center gap-4 text-xs sm:text-sm font-medium">
-      <div>Gasto: <span id="spentDisplay" class="text-amber-400 font-bold">$0.00</span></div>
-      <div>Pity: <span id="pityText" class="text-purple-400 font-bold">0/30</span></div>
-    </div>
-  </header>
-
-  <main class="flex-1 max-w-4xl w-full mx-auto px-4 py-6 flex flex-col items-center justify-center gap-6 sm:gap-8">
-    
-    <!-- Contenedor Carta Gacha -->
-    <div class="w-56 sm:w-64 h-72 sm:h-80 perspective-1000">
-      <div id="cardInner" class="relative w-full h-full transition-transform duration-700 transform-style-3d cursor-pointer">
-        
-        <!-- Frente de la carta -->
-        <div class="absolute inset-0 w-full h-full bg-gradient-to-b from-slate-900 to-slate-950 border border-slate-800 rounded-2xl flex flex-col items-center justify-center p-4 backface-hidden shadow-2xl">
-          <div id="boxIcon" class="text-4xl sm:text-5xl mb-3 text-amber-400">🎁</div>
-          <p id="boxText" class="text-[10px] sm:text-xs uppercase tracking-widest text-slate-400 font-semibold text-center">Toca o tira abajo</p>
-        </div>
-
-        <!-- Reverso de la carta -->
-        <div id="cardBack" class="absolute inset-0 w-full h-full bg-slate-950 border-2 rounded-2xl flex flex-col items-center justify-center backface-hidden rotate-y-180 p-4 transition-all">
-          <span id="rarityBadge" class="px-3 py-1 text-xs font-black rounded-full uppercase tracking-widest mb-3">C</span>
-          <h3 id="rewardTitle" class="text-base sm:text-lg font-bold text-center text-white mb-2">---</h3>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- Panel Controles -->
-    <div class="flex flex-col sm:flex-row gap-3 w-full max-w-xs sm:max-w-none justify-center">
-      <button onclick="rollGacha(1)" class="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-slate-800 to-slate-900 border border-slate-700 hover:border-amber-500/50 text-white font-bold rounded-xl transition shadow-lg active:scale-95 text-sm">
-        Tirada x1 ($4.99)
-      </button>
-      <button onclick="rollGacha(10)" class="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-black rounded-xl transition shadow-lg shadow-amber-500/20 active:scale-95 text-sm">
-        Tirada x10 ($44.99)
-      </button>
-    </div>
-
-    <!-- Inventario -->
-    <section class="w-full bg-slate-900/30 border border-slate-800/60 rounded-2xl p-4 sm:p-5">
-      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
-        <h2 class="text-xs sm:text-sm font-bold uppercase tracking-widest text-slate-400">Inventario (<span id="invCount">0</span>)</h2>
-        <div class="flex gap-1 text-xs">
-          <button onclick="filterInventory('ALL')" class="px-2.5 py-1 bg-slate-800 rounded hover:bg-slate-700">Todos</button>
-          <button onclick="filterInventory('SSR')" class="px-2.5 py-1 bg-amber-500/20 text-amber-300 rounded hover:bg-amber-500/30">SSR</button>
-          <button onclick="filterInventory('SR')" class="px-2.5 py-1 bg-purple-500/20 text-purple-300 rounded hover:bg-purple-500/30">SR</button>
-        </div>
-      </div>
-      <div id="inventory" class="flex flex-wrap gap-2 max-h-48 overflow-y-auto">
-        <p class="text-xs text-slate-500 italic w-full">El inventario está vacío.</p>
-      </div>
-    </section>
-
-  </main>
-
-  <script src="/app.js"></script>
 </body>
 </html>
