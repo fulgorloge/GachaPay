@@ -8,24 +8,24 @@ generator client {
 }
 
 model Creator {
-  id          String   @id @default(uuid())
-  slug        String   @unique // Link independiente ej: gachapay.com/c/nombre-creador
-  name        String
-  avatarUrl   String?
-  gameType    String   @default("ROULETTE") // Uno de los 10 tipos de juegos
-  createdAt   DateTime @default(now())
-  rewards     Reward[]
-  plays       PlayHistory[]
+  id        String        @id @default(uuid())
+  slug      String        @unique
+  name      String
+  avatarUrl String?
+  gameType  String        @default("ROULETTE")
+  createdAt DateTime      @default(now())
+  rewards   Reward[]
+  plays     PlayHistory[]
 }
 
 model Reward {
-  id          String   @id @default(uuid())
-  creatorId   String
-  creator     Creator  @relation(fields: [creatorId], references: [id], onDelete: Cascade)
-  name        String
-  rarity      String   // 'C', 'R', 'SR', 'SSR'
-  mediaUrl    String?  // URL de foto, video o archivo
-  mediaType   String?  // 'IMAGE', 'VIDEO', 'FILE'
+  id        String   @id @default(uuid())
+  creatorId String
+  creator   Creator  @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  name      String
+  rarity    String   // 'C', 'R', 'SR', 'SSR'
+  mediaUrl  String?
+  mediaType String?  // 'IMAGE', 'VIDEO', 'FILE'
 }
 
 model PlayHistory {
