@@ -6,18 +6,18 @@
   <title>GachaPay - Multijuego Creator Hub</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans min-h-screen p-4 sm:p-8 flex flex-col items-center">
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen p-4 sm:p-8 flex flex-col items-center justify-center">
 
   <div class="max-w-xl w-full bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl">
-    <h1 class="text-2xl font-black text-amber-400 mb-4 text-center">GachaPay Creator Hub</h1>
+    <h1 class="text-2xl font-black text-amber-400 mb-6 text-center tracking-wide">GACHAPAY HUB</h1>
     
-    <!-- Formulario para Crear Perfil Anónimo -->
+    <!-- Formulario para Crear Perfil Anónimo y Minijuego -->
     <div id="creatorSetup" class="flex flex-col gap-4">
-      <h2 class="text-sm font-bold uppercase tracking-wider text-slate-400">1. Crea tu perfil y elige tu minijuego</h2>
-      <input type="text" id="creatorName" placeholder="Tu Nombre / Canal" class="p-3 bg-slate-950 border border-slate-800 rounded-xl text-sm">
-      <input type="text" id="creatorSlug" placeholder="URL única (ej: tu-nombre)" class="p-3 bg-slate-950 border border-slate-800 rounded-xl text-sm">
+      <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400">1. Crea tu perfil y elige tu minijuego</h2>
+      <input type="text" id="creatorName" placeholder="Tu Nombre / Canal" class="p-3 bg-slate-950 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-amber-500">
+      <input type="text" id="creatorSlug" placeholder="URL única (ej: tu-nombre)" class="p-3 bg-slate-950 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-amber-500">
       
-      <select id="gameTypeSelect" class="p-3 bg-slate-950 border border-slate-800 rounded-xl text-sm text-slate-300">
+      <select id="gameTypeSelect" class="p-3 bg-slate-950 border border-slate-800 rounded-xl text-sm text-slate-300 focus:outline-none focus:border-amber-500">
         <option value="ROULETTE">1. Ruleta de Neón</option>
         <option value="CHEST">2. Cofre del Tesoro Arcano</option>
         <option value="SCRATCH">3. Raspa y Gana de Lujo</option>
@@ -30,25 +30,27 @@
         <option value="COIN">10. Lanza-Monedas Cuántico</option>
       </select>
 
-      <button onclick="createCreator()" class="py-3 bg-amber-500 hover:bg-amber-400 text-black font-black rounded-xl transition">Crear mi Link Independiente</button>
+      <button onclick="createCreator()" class="py-3 bg-amber-500 hover:bg-amber-400 text-black font-black rounded-xl transition shadow-lg shadow-amber-500/10">Crear mi Link Independiente</button>
     </div>
 
-    <!-- Panel de Gestión -->
-    <div id="dashboard" class="hidden flex flex-col gap-4 mt-6 border-t border-slate-800 pt-6">
-      <h2 class="text-sm font-bold uppercase tracking-wider text-amber-400">¡Tu link está listo para compartir!</h2>
-      <input type="text" id="shareLink" readonly class="p-3 bg-slate-950 border border-slate-800 rounded-xl text-xs text-amber-200">
+    <!-- Panel de Gestión y Multimedia -->
+    <div id="dashboard" class="hidden flex flex-col gap-4 mt-2">
+      <h2 class="text-xs font-bold uppercase tracking-wider text-amber-400">¡Tu link está listo para compartir!</h2>
+      <input type="text" id="shareLink" readonly class="p-3 bg-slate-950 border border-slate-800 rounded-xl text-xs text-amber-200 select-all">
       
-      <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mt-4">2. Agrega Premios Multimedia (Foto, Video, Archivo)</h3>
-      <input type="text" id="rewardName" placeholder="Nombre del Premio (Ej: Wallpaper Exclusivo)" class="p-3 bg-slate-950 border border-slate-800 rounded-xl text-sm">
-      <select id="rewardRarity" class="p-3 bg-slate-950 border border-slate-800 rounded-xl text-sm">
-        <option value="C">Común (C)</option>
-        <option value="R">Raro (R)</option>
-        <option value="SR">Super Raro (SR)</option>
-        <option value="SSR">Ultra Raro (SSR)</option>
-      </select>
-      <input type="text" id="mediaUrl" placeholder="URL del Archivo, Foto o Video" class="p-3 bg-slate-950 border border-slate-800 rounded-xl text-sm">
-      
-      <button onclick="addReward()" class="py-3 bg-slate-800 hover:bg-slate-700 font-bold rounded-xl text-sm">Añadir Premio al Juego</button>
+      <div class="border-t border-slate-800 pt-4 mt-2 flex flex-col gap-3">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">2. Agrega Premios Multimedia (Foto, Video, Archivo)</h3>
+        <input type="text" id="rewardName" placeholder="Nombre del Premio (Ej: Wallpaper Exclusivo)" class="p-3 bg-slate-950 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-amber-500">
+        <select id="rewardRarity" class="p-3 bg-slate-950 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-amber-500">
+          <option value="C">Común (C)</option>
+          <option value="R">Raro (R)</option>
+          <option value="SR">Super Raro (SR)</option>
+          <option value="SSR">Ultra Raro (SSR)</option>
+        </select>
+        <input type="text" id="mediaUrl" placeholder="URL directa del Archivo, Foto o Video" class="p-3 bg-slate-950 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-amber-500">
+        
+        <button onclick="addReward()" class="py-3 bg-slate-800 hover:bg-slate-700 font-bold rounded-xl text-sm transition border border-slate-700">Añadir Premio al Juego</button>
+      </div>
     </div>
   </div>
 
@@ -71,17 +73,19 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ name, slug, gameType })
         });
+        
         const data = await res.json();
-        if(data.id) {
+        
+        if (res.ok && data.id) {
           currentCreatorId = data.id;
           document.getElementById('creatorSetup').classList.add('hidden');
           document.getElementById('dashboard').classList.remove('hidden');
           document.getElementById('shareLink').value = `${window.location.origin}/play.html?c=${slug}`;
         } else {
-          alert(data.error || 'Error al crear el perfil');
+          alert('Error: ' + (data.error || 'No se pudo crear el perfil'));
         }
       } catch (err) {
-        alert('No se pudo conectar con el servidor.');
+        alert('Error de conexión con el servidor: ' + err.message);
       }
     }
 
@@ -91,19 +95,26 @@
       const mediaUrl = document.getElementById('mediaUrl').value;
 
       if (!name || !mediaUrl) {
-        alert('Ingresa el nombre y la URL del archivo.');
+        alert('Ingresa el nombre y la URL del archivo multimedia.');
         return;
       }
 
-      const res = await fetch(`/api/creators/${currentCreatorId}/rewards`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, rarity, mediaUrl, mediaType: 'MEDIA' })
-      });
-      if(res.ok) {
-        alert('¡Premio agregado con éxito!');
-        document.getElementById('rewardName').value = '';
-        document.getElementById('mediaUrl').value = '';
+      try {
+        const res = await fetch(`/api/creators/${currentCreatorId}/rewards`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, rarity, mediaUrl, mediaType: 'MEDIA' })
+        });
+        
+        if (res.ok) {
+          alert('¡Premio multimedia agregado con éxito!');
+          document.getElementById('rewardName').value = '';
+          document.getElementById('mediaUrl').value = '';
+        } else {
+          alert('Error al guardar el premio.');
+        }
+      } catch (err) {
+        alert('Error de red al registrar el premio.');
       }
     }
   </script>
