@@ -2,639 +2,104 @@
 <html lang="es" class="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>GachaPay — Apex Luxury Cyber Roulette</title>
-  
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GachaPay - Luxury Experience</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            gold: {
+              400: '#FBBF24',
+              500: '#F59E0B',
+              600: '#D97706',
+            }
+          }
+        }
+      }
+    }
+  </script>
   <style>
-    *, ::before, ::after { 
-      box-sizing: border-box; 
-      border-width: 0; 
-      border-style: solid; 
-      border-color: rgba(255, 255, 255, 0.08); 
-      -webkit-tap-highlight-color: transparent; 
-    }
+    .perspective-1000 { perspective: 1000px; }
+    .transform-style-3d { transform-style: preserve-3d; }
+    .backface-hidden { backface-visibility: hidden; }
+    .rotate-y-180 { transform: rotateY(180deg); }
     
-    html { 
-      line-height: 1.5; 
-      font-family: 'Plus Jakarta Sans', sans-serif; 
-      background-color: #010206; 
-      color: #f3f4f6; 
-      scroll-behavior: smooth;
+    .glow-c { box-shadow: 0 0 15px rgba(107, 114, 128, 0.3); }
+    .glow-r { box-shadow: 0 0 20px rgba(59, 130, 246, 0.4); }
+    .glow-sr { box-shadow: 0 0 25px rgba(168, 85, 247, 0.5); }
+    .glow-ssr { box-shadow: 0 0 35px rgba(245, 158, 11, 0.8); }
+    
+    @keyframes customSpin {
+      0% { transform: rotate(0deg) scale(1); }
+      50% { transform: rotate(180deg) scale(1.1); }
+      100% { transform: rotate(360deg) scale(1); }
     }
-
-    body { 
-      margin: 0; 
-      min-height: 100dvh; 
-      display: flex; 
-      flex-direction: column; 
-      justify-content: space-between; 
-      overflow-x: hidden; 
-      position: relative; 
-      background: radial-gradient(circle at 50% 0%, #0d1b3e 0%, #030611 60%, #010206 100%);
-    }
-
-    .cyber-grid {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background-image: 
-        linear-gradient(to right, rgba(56, 189, 248, 0.03) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(168, 85, 247, 0.03) 1px, transparent 1px);
-      background-size: 40px 40px; z-index: 1; pointer-events: none;
-      animation: grid-move 25s linear infinite;
-    }
-
-    @keyframes grid-move { 0% { background-position: 0 0; } 100% { background-position: 40px 40px; } }
-
-    .glow-beam {
-      position: absolute; top: -150px; left: 50%; transform: translateX(-50%);
-      width: 600px; height: 600px;
-      background: radial-gradient(circle, rgba(56, 189, 248, 0.18) 0%, rgba(168, 85, 247, 0.1) 40%, rgba(0,0,0,0) 70%);
-      filter: blur(100px); pointer-events: none; z-index: 1;
-    }
-
-    #flash-overlay {
-      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-      pointer-events: none; z-index: 9999; opacity: 0; mix-blend-mode: screen;
-    }
-    .flash-active-ssr { animation: flash-strobe-ssr 0.8s cubic-bezier(0.1, 0.9, 0.2, 1) forwards; }
-    .flash-active-sr { animation: flash-strobe-sr 0.6s cubic-bezier(0.1, 0.9, 0.2, 1) forwards; }
-
-    @keyframes flash-strobe-ssr {
-      0% { opacity: 0; background: #ffffff; }
-      15% { opacity: 1; background: #38bdf8; }
-      30% { opacity: 0.5; background: #ffffff; }
-      45% { opacity: 0.95; background: #f43f5e; }
-      100% { opacity: 0; background: transparent; }
-    }
-    @keyframes flash-strobe-sr {
-      0% { opacity: 0; background: #ffffff; }
-      20% { opacity: 0.85; background: #c084fc; }
-      100% { opacity: 0; background: transparent; }
-    }
-
-    .shake-impact { animation: screen-shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both; }
-    @keyframes screen-shake {
-      10%, 90% { transform: translate3d(-2px, 2px, 0) rotate(-0.8deg); }
-      20%, 80% { transform: translate3d(3px, -2px, 0) rotate(0.8deg); }
-      30%, 50%, 70% { transform: translate3d(-4px, 3px, 0) rotate(-1.2deg); }
-      40%, 60% { transform: translate3d(4px, -3px, 0) rotate(1.2deg); }
-    }
-
-    .font-mono { font-family: 'Space Grotesk', sans-serif; }
-    .font-heading { font-family: 'Orbitron', sans-serif; letter-spacing: 0.05em; }
-
-    #particles-canvas {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      pointer-events: none; z-index: 2;
-    }
-
-    .text-gradient {
-      background: linear-gradient(135deg, #38bdf8 0%, #c084fc 45%, #f43f5e 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      background-size: 200% auto; animation: text-shine 4s linear infinite;
-    }
-    @keyframes text-shine { to { background-position: 200% center; } }
-
-    .glow-card-wrapper {
-      position: relative; border-radius: 28px; padding: 1px;
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.02) 40%, rgba(56, 189, 248, 0.5) 100%);
-      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); width: 100%;
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
-    }
-
-    .glass-card {
-      background: rgba(6, 11, 24, 0.85);
-      backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
-      border-radius: 27px; box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.2);
-      height: 100%; overflow: hidden; position: relative;
-    }
-
-    .max-w-7xl { max-width: 82rem; }
-    .mx-auto { margin-left: auto; margin-right: auto; }
-    .hidden { display: none !important; }
-    .flex { display: flex; }
-    .grid { display: grid; }
-    .flex-col { flex-direction: column; }
-    .items-center { align-items: center; }
-    .gap-6 { gap: 1.5rem; }
-
-    .modern-btn {
-      position: relative; border: none; border-radius: 18px; padding: 1px;
-      cursor: pointer; overflow: hidden; touch-action: manipulation;
-      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
-      background: linear-gradient(135deg, #06b6d4, #a855f7, #f43f5e);
-      box-shadow: 0 0 30px rgba(6, 182, 212, 0.4); width: 100%;
-    }
-    .modern-btn:active { transform: scale(0.96); }
-    .modern-btn:disabled { opacity: 0.4; filter: grayscale(1); cursor: not-allowed; transform: none !important; box-shadow: none !important; }
-
-    .badge {
-      display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.35rem 0.85rem;
-      border-radius: 9999px; font-size: 0.68rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.12em;
-    }
-    .badge-ssr { background: linear-gradient(135deg, rgba(6, 182, 212, 0.4), rgba(244, 63, 94, 0.4)); color: #38bdf8; border: 1px solid #38bdf8; box-shadow: 0 0 20px rgba(56, 189, 248, 0.6); }
-    .badge-sr { background: rgba(168, 85, 247, 0.3); color: #e9d5ff; border: 1px solid rgba(168, 85, 247, 0.8); }
-    .badge-r { background: rgba(59, 130, 246, 0.25); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.6); }
-    .badge-c { background: rgba(148, 163, 184, 0.15); color: #cbd5e1; border: 1px solid rgba(148, 163, 184, 0.3); }
-
-    .roulette-perspective-container {
-      perspective: 1000px; width: 100%; display: flex; justify-content: center; padding: 1rem 0;
-    }
-
-    .roulette-stage-wrapper {
-      position: relative; width: 310px; height: 310px;
-      transform-style: preserve-3d; transform: rotateX(18deg);
-      transition: transform 0.5s ease-out;
-    }
-
-    .roulette-outer-ring {
-      position: absolute; top: -16px; left: -16px; right: -16px; bottom: -16px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(15, 23, 42, 0.8) 0%, rgba(2, 4, 10, 0.98) 100%);
-      border: 3px solid rgba(56, 189, 248, 0.6);
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.9), 0 0 30px rgba(6, 182, 212, 0.4), inset 0 0 15px rgba(168, 85, 247, 0.4);
-      z-index: 1; pointer-events: none;
-    }
-
-    .roulette-flipper {
-      position: absolute; top: -22px; left: 50%; transform: translateX(-50%);
-      width: 36px; height: 42px; z-index: 30; pointer-events: none;
-      filter: drop-shadow(0 10px 15px rgba(0,0,0,0.9)) drop-shadow(0 0 15px rgba(56,189,248,1));
-      transition: transform 0.05s ease-out;
-    }
-
-    .roulette-flipper-kick { transform: translateX(-50%) rotate(-22deg) scale(1.18) !important; }
-
-    .led-ring {
-      position: absolute; top: -10px; left: -10px; right: -10px; bottom: -10px;
-      border-radius: 50%; z-index: 10; pointer-events: none;
-    }
-
-    .led-dot {
-      position: absolute; width: 7px; height: 7px; border-radius: 50%;
-      background: #1e293b; box-shadow: 0 0 2px rgba(0,0,0,0.8);
-      transition: background 0.15s, box-shadow 0.15s;
-    }
-
-    .led-dot.active { background: #38bdf8; box-shadow: 0 0 10px #38bdf8, 0 0 20px #38bdf8; }
-    .led-dot.winner { background: #f43f5e !important; box-shadow: 0 0 12px #f43f5e, 0 0 25px #f43f5e !important; }
-
-    .roulette-center-cap {
-      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-      width: 72px; height: 72px; border-radius: 50%;
-      background: radial-gradient(circle at 30% 30%, #ffffff 0%, #38bdf8 30%, #030712 85%);
-      border: 2px solid rgba(255, 255, 255, 0.8);
-      box-shadow: 0 0 30px rgba(56, 189, 248, 0.9), inset 0 0 12px rgba(255,255,255,0.6);
-      z-index: 20; pointer-events: none; display: flex; align-items: center; justify-content: center;
-    }
-    .roulette-center-cap::after { content: "👑"; font-size: 1.5rem; filter: drop-shadow(0 0 10px rgba(255,255,255,0.9)); }
-
-    @media (min-width: 640px) {
-      .roulette-stage-wrapper { width: 360px; height: 360px; }
-      .roulette-center-cap { width: 84px; height: 84px; }
-    }
-
-    .grid-inventory { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.85rem; }
-    @media (min-width: 640px) { .grid-inventory { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-    @media (min-width: 1024px) {
-      .grid-inventory { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-      .lg\:grid-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); } 
-      .lg\:col-span-6 { grid-column: span 6 / span 6; }
-    }
+    .animate-spin-custom { animation: customSpin 0.8s infinite linear; }
   </style>
 </head>
-<body id="main-body">
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col justify-between selection:bg-amber-500 selection:text-black">
 
-  <div id="flash-overlay"></div>
-  <div class="cyber-grid"></div>
-  <div class="glow-beam"></div>
-  <canvas id="particles-canvas"></canvas>
-
-  <header style="border-bottom: 1px solid rgba(255,255,255,0.1); background: rgba(2, 4, 10, 0.85); backdrop-filter: blur(25px); position: sticky; top: 0; z-index: 50;">
-    <div class="max-w-7xl mx-auto" style="padding: 0.85rem 1.25rem; display: flex; align-items: center; justify-content: space-between;">
-      <div style="display: flex; align-items: center; gap: 0.75rem;">
-        <span style="font-size: 1.3rem;">🎰</span>
-        <span class="font-heading" style="font-weight: 900; font-size: 1.2rem; color: white;">GACHA<span class="text-gradient">PAY</span></span>
-      </div>
-      <div style="padding: 0.45rem 0.95rem; display: flex; align-items: center; gap: 0.5rem; border-radius: 16px; border: 1px solid rgba(56, 189, 248, 0.4); background: rgba(12, 24, 56, 0.7);">
-        <span>🪙</span>
-        <span id="user-tokens" class="font-mono" style="font-size: 1rem; font-weight: 800; color: #38bdf8;">100</span>
-      </div>
+  <header class="border-b border-slate-800/80 bg-slate-900/50 backdrop-blur-md sticky top-0 z-50 px-4 sm:px-6 py-4 flex flex-col sm:flex-row justify-between items-center gap-2">
+    <div class="flex items-center gap-2">
+      <span class="text-xl sm:text-2xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-amber-600">GACHAPAY</span>
+    </div>
+    <div class="flex items-center gap-4 text-xs sm:text-sm font-medium">
+      <div>Gasto: <span id="spentDisplay" class="text-amber-400 font-bold">$0.00</span></div>
+      <div>Pity: <span id="pityText" class="text-purple-400 font-bold">0/30</span></div>
     </div>
   </header>
 
-  <main class="max-w-7xl mx-auto" style="padding: 2rem 1.25rem; display: flex; flex-direction: column; gap: 2.5rem; flex-grow: 1; z-index: 10; width: 100%;">
+  <main class="flex-1 max-w-4xl w-full mx-auto px-4 py-6 flex flex-col items-center justify-center gap-6 sm:gap-8">
     
-    <section class="grid lg:grid-cols-12 gap-6 items-center">
-      <div class="lg:col-span-6 flex flex-col gap-4">
-        <div style="display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.4rem 0.9rem; background: rgba(56,189,248,0.1); border: 1px solid rgba(56,189,248,0.4); border-radius: 9999px; width: fit-content;">
-          <span style="width: 7px; height: 7px; border-radius: 9999px; background-color: #38bdf8;"></span>
-          <span style="font-size: 11px; text-transform: uppercase; font-weight: 900; letter-spacing: 0.15em; color: #38bdf8;">Apex Cyber Engine v3.0</span>
-        </div>
+    <!-- Contenedor Carta Gacha -->
+    <div class="w-56 sm:w-64 h-72 sm:h-80 perspective-1000">
+      <div id="cardInner" class="relative w-full h-full transition-transform duration-700 transform-style-3d cursor-pointer">
         
-        <h1 class="font-heading" style="font-size: 2.2rem; font-weight: 900; line-height: 1.15; color: white; margin: 0;">
-          RULETA 3D <br><span class="text-gradient">ISOMÉTRICA APEX</span>
-        </h1>
+        <!-- Frente de la carta -->
+        <div class="absolute inset-0 w-full h-full bg-gradient-to-b from-slate-900 to-slate-950 border border-slate-800 rounded-2xl flex flex-col items-center justify-center p-4 backface-hidden shadow-2xl">
+          <div id="boxIcon" class="text-4xl sm:text-5xl mb-3 text-amber-400">🎁</div>
+          <p id="boxText" class="text-[10px] sm:text-xs uppercase tracking-widest text-slate-400 font-semibold text-center">Toca o tira abajo</p>
+        </div>
+
+        <!-- Reverso de la carta -->
+        <div id="cardBack" class="absolute inset-0 w-full h-full bg-slate-950 border-2 rounded-2xl flex flex-col items-center justify-center backface-hidden rotate-y-180 p-4 transition-all">
+          <span id="rarityBadge" class="px-3 py-1 text-xs font-black rounded-full uppercase tracking-widest mb-3">C</span>
+          <h3 id="rewardTitle" class="text-base sm:text-lg font-bold text-center text-white mb-2">---</h3>
+        </div>
+
       </div>
+    </div>
 
-      <div class="lg:col-span-6 flex flex-col items-center">
-        <div class="glow-card-wrapper">
-          <div class="glass-card" style="padding: 2rem 1.25rem; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-            <div id="game-roulette-container" class="flex flex-col items-center gap-6" style="width: 100%;">
-              <div class="roulette-perspective-container">
-                <div class="roulette-stage-wrapper">
-                  <div class="roulette-outer-ring"></div>
-                  <div id="led-ring" class="led-ring"></div>
-                  
-                  <svg id="roulette-flipper" class="roulette-flipper" viewBox="0 0 40 50">
-                    <path d="M 20 50 L 4 10 A 16 16 0 1 1 36 10 Z" fill="url(#flipperGradient)" stroke="#ffffff" stroke-width="2.5" />
-                    <defs>
-                      <linearGradient id="flipperGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#38bdf8" />
-                        <stop offset="50%" stop-color="#c084fc" />
-                        <stop offset="100%" stop-color="#f43f5e" />
-                      </linearGradient>
-                    </defs>
-                  </svg>
+    <!-- Panel Controles -->
+    <div class="flex flex-col sm:flex-row gap-3 w-full max-w-xs sm:max-w-none justify-center">
+      <button onclick="rollGacha(1)" class="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-slate-800 to-slate-900 border border-slate-700 hover:border-amber-500/50 text-white font-bold rounded-xl transition shadow-lg active:scale-95 text-sm">
+        Tirada x1 ($4.99)
+      </button>
+      <button onclick="rollGacha(10)" class="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-black rounded-xl transition shadow-lg shadow-amber-500/20 active:scale-95 text-sm">
+        Tirada x10 ($44.99)
+      </button>
+    </div>
 
-                  <canvas id="roulette-canvas" width="360" height="360" style="border-radius: 9999px; z-index: 5;"></canvas>
-                  <div class="roulette-center-cap"></div>
-                </div>
-              </div>
-
-              <button id="spin-wheel-btn" onclick="spinWheel()" class="modern-btn">
-                <span class="font-heading" style="display: block; padding: 1.1rem; background: rgba(2, 4, 10, 0.85); color: white; font-size: 0.9rem; font-weight: 800; border-radius: 17px;">
-                  ACTIVAR RULETA (10 FICHAS)
-                </span>
-              </button>
-            </div>
-
-            <div id="game-result" class="hidden flex-col items-center gap-2" style="margin-top: 1.25rem; width: 100%; text-align: center; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.12); padding: 1.1rem; border-radius: 18px; backdrop-filter: blur(15px);">
-              <span id="result-badge" class="badge"></span>
-              <h3 id="result-title" class="font-heading" style="font-size: 1.15rem; font-weight: 800; color: white; margin: 0.2rem 0 0;"></h3>
-              <p id="result-desc" style="font-size: 0.8rem; color: #94a3b8; margin: 0;"></p>
-            </div>
-          </div>
+    <!-- Inventario -->
+    <section class="w-full bg-slate-900/30 border border-slate-800/60 rounded-2xl p-4 sm:p-5">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
+        <h2 class="text-xs sm:text-sm font-bold uppercase tracking-widest text-slate-400">Inventario (<span id="invCount">0</span>)</h2>
+        <div class="flex gap-1 text-xs">
+          <button onclick="filterInventory('ALL')" class="px-2.5 py-1 bg-slate-800 rounded hover:bg-slate-700">Todos</button>
+          <button onclick="filterInventory('SSR')" class="px-2.5 py-1 bg-amber-500/20 text-amber-300 rounded hover:bg-amber-500/30">SSR</button>
+          <button onclick="filterInventory('SR')" class="px-2.5 py-1 bg-purple-500/20 text-purple-300 rounded hover:bg-purple-500/30">SR</button>
         </div>
       </div>
-    </section>
-
-    <section class="glow-card-wrapper">
-      <div class="glass-card" style="padding: 1.5rem; display: flex; flex-direction: column; gap: 1.25rem;">
-        <h2 class="font-heading" style="font-size: 1.2rem; font-weight: 800; color: white; margin: 0;">BÓVEDA DIGITAL</h2>
-        <div id="inventory-grid" class="grid-inventory"></div>
+      <div id="inventory" class="flex flex-wrap gap-2 max-h-48 overflow-y-auto">
+        <p class="text-xs text-slate-500 italic w-full">El inventario está vacío.</p>
       </div>
     </section>
+
   </main>
 
-  <script>
-    const AudioCtx = window.AudioContext || window.webkitAudioContext;
-    let audioCtx = null;
-
-    function playTickSound() {
-      try {
-        if (!audioCtx) audioCtx = new AudioCtx();
-        if (audioCtx.state === 'suspended') audioCtx.resume();
-
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(1200, audioCtx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.03);
-
-        gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.03);
-
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.03);
-      } catch (e) {}
-    }
-
-    const pCanvas = document.getElementById('particles-canvas');
-    const pCtx = pCanvas.getContext('2d');
-    let particles = [];
-    
-    function resizeCanvas() { pCanvas.width = window.innerWidth; pCanvas.height = window.innerHeight; }
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-
-    class Particle {
-      constructor() { this.reset(); }
-      reset() {
-        this.x = Math.random() * pCanvas.width;
-        this.y = Math.random() * pCanvas.height;
-        this.size = Math.random() * 2 + 0.5;
-        this.speedY = -(Math.random() * 0.5 + 0.15);
-        this.speedX = (Math.random() - 0.5) * 0.3;
-        this.alpha = Math.random() * 0.5 + 0.1;
-      }
-      update() { 
-        this.y += this.speedY; this.x += this.speedX;
-        if (this.y < 0 || this.x < 0 || this.x > pCanvas.width) this.reset(); 
-      }
-      draw() {
-        pCtx.fillStyle = `rgba(56, 189, 248, ${this.alpha})`;
-        pCtx.beginPath(); pCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2); pCtx.fill();
-      }
-    }
-    for (let i = 0; i < 35; i++) particles.push(new Particle());
-    function animateParticles() {
-      pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
-      particles.forEach(p => { p.update(); p.draw(); });
-      requestAnimationFrame(animateParticles);
-    }
-    animateParticles();
-
-    let tokens = parseInt(localStorage.getItem('gachapay_tokens') || '100');
-    document.getElementById('user-tokens').innerText = tokens;
-    function updateTokens(amt) {
-      tokens += amt;
-      localStorage.setItem('gachapay_tokens', tokens);
-      document.getElementById('user-tokens').innerText = tokens;
-    }
-
-    const RARITIES = {
-      'SSR': { badgeClass: 'badge-ssr', border: 'rgba(56, 189, 248, 0.8)' },
-      'SR': { badgeClass: 'badge-sr', border: 'rgba(168, 85, 247, 0.7)' },
-      'R': { badgeClass: 'badge-r', border: 'rgba(59, 130, 246, 0.6)' },
-      'C': { badgeClass: 'badge-c', border: 'rgba(148, 163, 184, 0.3)' }
-    };
-
-    const ledContainer = document.getElementById('led-ring');
-    const totalLeds = 24;
-    const leds = [];
-
-    for (let i = 0; i < totalLeds; i++) {
-      const dot = document.createElement('div');
-      dot.className = 'led-dot';
-      const angle = (i / totalLeds) * (2 * Math.PI);
-      const radius = 168;
-      const x = 155 + radius * Math.cos(angle);
-      const y = 155 + radius * Math.sin(angle);
-      dot.style.left = `${x}px`;
-      dot.style.top = `${y}px`;
-      ledContainer.appendChild(dot);
-      leds.push(dot);
-    }
-
-    function animateLeds(step) {
-      leds.forEach((led, idx) => {
-        if ((idx + step) % 3 === 0) {
-          led.classList.add('active');
-        } else {
-          led.classList.remove('active', 'winner');
-        }
-      });
-    }
-
-    const canvas = document.getElementById('roulette-canvas');
-    const ctx = canvas.getContext('2d');
-    const flipper = document.getElementById('roulette-flipper');
-
-    const sectors = [
-      { id: 'item_ssr_1', label: 'SSR CORE', rarity: 'SSR', color1: '#0284c7', color2: '#030712', icon: '💎' },
-      { id: 'item_c_1', label: 'DATA C', rarity: 'C', color1: '#1e293b', color2: '#030712', icon: '💾' },
-      { id: 'item_sr_1', label: 'SR PASS', rarity: 'SR', color1: '#7e22ce', color2: '#030712', icon: '⚡' },
-      { id: 'item_c_2', label: 'DATA C', rarity: 'C', color1: '#1e293b', color2: '#030712', icon: '💾' },
-      { id: 'item_r_1', label: 'R CHIP', rarity: 'R', color1: '#1d4ed8', color2: '#030712', icon: '🔑' },
-      { id: 'item_c_3', label: 'DATA C', rarity: 'C', color1: '#1e293b', color2: '#030712', icon: '💾' }
-    ];
-
-    let currentAngle = 0;
-    let isSpinning = false;
-    let lastSectorIndex = -1;
-    let ledStep = 0;
-
-    function drawWheel() {
-      const num = sectors.length;
-      const arc = (2 * Math.PI) / num;
-      const radius = canvas.width / 2;
-
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      sectors.forEach((sector, i) => {
-        const angle = currentAngle + i * arc;
-
-        const grad = ctx.createRadialGradient(radius, radius, 10, radius, radius, radius);
-        grad.addColorStop(0, '#02040a');
-        grad.addColorStop(0.55, sector.color1);
-        grad.addColorStop(1, '#02040a');
-
-        ctx.beginPath();
-        ctx.fillStyle = grad;
-        ctx.moveTo(radius, radius);
-        ctx.arc(radius, radius, radius - 8, angle, angle + arc);
-        ctx.lineTo(radius, radius);
-        ctx.fill();
-
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
-        ctx.lineWidth = 2.5;
-        ctx.stroke();
-
-        ctx.save();
-        ctx.translate(radius, radius);
-        ctx.rotate(angle + arc / 2);
-        ctx.textAlign = "right";
-        ctx.fillStyle = "#ffffff";
-        ctx.font = "900 13px 'Orbitron', sans-serif";
-        ctx.shadowColor = "rgba(0,0,0,0.9)";
-        ctx.shadowBlur = 8;
-        ctx.fillText(`${sector.icon} ${sector.label}`, radius - 30, 5);
-        ctx.restore();
-      });
-
-      ctx.beginPath();
-      ctx.arc(radius, radius, radius - 8, 0, 2 * Math.PI);
-      ctx.strokeStyle = 'rgba(56, 189, 248, 0.5)';
-      ctx.lineWidth = 5;
-      ctx.stroke();
-    }
-
-    drawWheel();
-
-    function checkFlipperPhysics() {
-      const num = sectors.length;
-      const arc = (2 * Math.PI) / num;
-      let normalizedAngle = (3 * Math.PI / 2 - currentAngle) % (2 * Math.PI);
-      if (normalizedAngle < 0) normalizedAngle += 2 * Math.PI;
-
-      const currentSector = Math.floor(normalizedAngle / arc);
-
-      if (currentSector !== lastSectorIndex) {
-        lastSectorIndex = currentSector;
-        
-        flipper.classList.add('roulette-flipper-kick');
-        setTimeout(() => flipper.classList.remove('roulette-flipper-kick'), 45);
-
-        playTickSound();
-        if ('vibrate' in navigator) navigator.vibrate(12);
-
-        ledStep++;
-        animateLeds(ledStep);
-      }
-    }
-
-    // CONEXIÓN INTEGRADA: REALIZA EL PULL AL BACKEND Y EJECUTA LA ANIMACIÓN
-    async function spinWheel() {
-      if (isSpinning) return;
-      if (tokens < 10) return alert('No tienes suficientes fichas.');
-
-      isSpinning = true;
-      document.getElementById('spin-wheel-btn').disabled = true;
-      document.getElementById('game-result').classList.add('hidden');
-
-      let targetSector = 0;
-      let wonItemData = null;
-
-      try {
-        // PETICIÓN AL BACKEND (Express / Stripe)
-        const response = await fetch('/api/gacha/pull', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ 
-            gachaId: 'gacha_default_1', 
-            userId: localStorage.getItem('gachapay_user_id') || 'user_demo' 
-          })
-        });
-
-        if (!response.ok) {
-          const err = await response.json();
-          throw new Error(err.error || 'Error procesando la tirada');
-        }
-
-        const data = await response.json();
-        wonItemData = data.wonItem;
-
-        // Buscar sector correspondiente al ítem otorgado por el servidor
-        const foundIndex = sectors.findIndex(s => s.id === wonItemData.id || s.rarity === wonItemData.rarity);
-        targetSector = foundIndex !== -1 ? foundIndex : Math.floor(Math.random() * sectors.length);
-
-        updateTokens(-10);
-
-      } catch (err) {
-        console.warn('Fallback local activado:', err.message);
-        // Fallback para pruebas sin servidor Stripe configurado
-        targetSector = Math.floor(Math.random() * sectors.length);
-        const fallbackSector = sectors[targetSector];
-        wonItemData = { rarity: fallbackSector.rarity, name: fallbackSector.label };
-        updateTokens(-10);
-      }
-
-      const arc = (2 * Math.PI) / sectors.length;
-      const targetSectorAngle = 2 * Math.PI - (targetSector * arc + arc / 2);
-      const totalTurns = (7 + Math.floor(Math.random() * 3)) * 2 * Math.PI;
-      const finalAngle = currentAngle + totalTurns + (targetSectorAngle - (currentAngle % (2 * Math.PI)));
-
-      const duration = 5000;
-      const startTime = performance.now();
-      const startAngle = currentAngle;
-
-      function easeOutElasticish(t) {
-        return 1 - Math.pow(1 - t, 4);
-      }
-
-      function animateSpin(now) {
-        const elapsed = now - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        const easedProgress = easeOutElasticish(progress);
-
-        currentAngle = startAngle + (finalAngle - startAngle) * easedProgress;
-        drawWheel();
-        checkFlipperPhysics();
-
-        if (progress < 1) {
-          requestAnimationFrame(animateSpin);
-        } else {
-          isSpinning = false;
-          document.getElementById('spin-wheel-btn').disabled = false;
-          
-          leds.forEach(l => l.classList.add('winner'));
-          showResult(wonItemData.rarity, wonItemData.name || sectors[targetSector].label, 'Extracción confirmada por GachaPay Engine.');
-        }
-      }
-
-      requestAnimationFrame(animateSpin);
-    }
-
-    function showResult(rarity, title, desc) {
-      const overlay = document.getElementById('flash-overlay');
-      const body = document.getElementById('main-body');
-
-      overlay.className = ''; body.classList.remove('shake-impact');
-      void overlay.offsetWidth; void body.offsetWidth;
-
-      if (rarity === 'SSR') {
-        overlay.classList.add('flash-active-ssr');
-        body.classList.add('shake-impact');
-      } else if (rarity === 'SR') {
-        overlay.classList.add('flash-active-sr');
-      }
-
-      const config = RARITIES[rarity] || RARITIES['C'];
-      const badge = document.getElementById('result-badge');
-      
-      badge.className = `badge ${config.badgeClass}`;
-      badge.innerText = rarity;
-
-      document.getElementById('result-title').innerText = title;
-      document.getElementById('result-desc').innerText = desc;
-
-      const container = document.getElementById('game-result');
-      container.classList.remove('hidden');
-      container.classList.add('flex');
-
-      saveInventoryItem({ rarity, name: title });
-    }
-
-    function saveInventoryItem(item) {
-      let inv = JSON.parse(localStorage.getItem('gachapay_arcade_inv') || '[]');
-      inv.unshift(item);
-      localStorage.setItem('gachapay_arcade_inv', JSON.stringify(inv));
-      renderInventory();
-    }
-
-    async function renderInventory() {
-      const container = document.getElementById('inventory-grid');
-      let items = JSON.parse(localStorage.getItem('gachapay_arcade_inv') || '[]');
-
-      // Sincronización opcional desde el servidor Prisma si existe userId
-      const userId = localStorage.getItem('gachapay_user_id');
-      if (userId) {
-        try {
-          const res = await fetch(`/api/inventory/${userId}`);
-          if (res.ok) {
-            const dbItems = await res.json();
-            if (dbItems.length > 0) {
-              items = dbItems.map(di => ({ rarity: di.item.rarity || 'C', name: di.item.name }));
-            }
-          }
-        } catch(e) {}
-      }
-
-      if (items.length === 0) {
-        container.innerHTML = '<p style="color: #64748b; font-size: 0.85rem; font-style: italic; grid-column: 1 / -1; margin: 0; text-align: center;">Bóveda vacía.</p>';
-        return;
-      }
-
-      container.innerHTML = items.map(item => {
-        const config = RARITIES[item.rarity] || RARITIES['C'];
-        return `
-          <div style="background: rgba(15, 23, 42, 0.5); border-radius: 18px; padding: 1rem; border: 1px solid ${config.border}; display: flex; flex-direction: column; gap: 0.5rem;">
-            <span class="badge ${config.badgeClass}" style="align-self: flex-start;">${item.rarity}</span>
-            <p class="font-heading" style="font-size: 0.8rem; color: white; font-weight: 700; margin: 0;">${item.name}</p>
-          </div>
-        `;
-      }).join('');
-    }
-
-    renderInventory();
-  </script>
+  <script src="/app.js"></script>
 </body>
 </html>
