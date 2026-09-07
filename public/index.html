@@ -14,7 +14,7 @@
     <!-- Formulario para Crear Perfil Anónimo -->
     <div id="creatorSetup" class="flex flex-col gap-4">
       <h2 class="text-sm font-bold uppercase tracking-wider text-slate-400">1. Crea tu perfil y elige tu minijuego</h2>
-      <input type="text" id=" creatorName" placeholder="Tu Nombre / Canal" class="p-3 bg-slate-950 border border-slate-800 rounded-xl text-sm">
+      <input type="text" id="creatorName" placeholder="Tu Nombre / Canal" class="p-3 bg-slate-950 border border-slate-800 rounded-xl text-sm">
       <input type="text" id="creatorSlug" placeholder="URL única (ej: tu-nombre)" class="p-3 bg-slate-950 border border-slate-800 rounded-xl text-sm">
       
       <select id="gameTypeSelect" class="p-3 bg-slate-950 border border-slate-800 rounded-xl text-sm text-slate-300">
@@ -33,7 +33,7 @@
       <button onclick="createCreator()" class="py-3 bg-amber-500 hover:bg-amber-400 text-black font-black rounded-xl transition">Crear mi Link Independiente</button>
     </div>
 
-    <!-- Panel de Gestión (Oculto inicialmente) -->
+    <!-- Panel de Gestión -->
     <div id="dashboard" class="hidden flex flex-col gap-4 mt-6 border-t border-slate-800 pt-6">
       <h2 class="text-sm font-bold uppercase tracking-wider text-amber-400">¡Tu link está listo para compartir!</h2>
       <input type="text" id="shareLink" readonly class="p-3 bg-slate-950 border border-slate-800 rounded-xl text-xs text-amber-200">
@@ -60,19 +60,28 @@
       const slug = document.getElementById('creatorSlug').value;
       const gameType = document.getElementById('gameTypeSelect').value;
 
-      const res = await fetch('/api/creators', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, slug, gameType })
-      });
-      const data = await res.json();
-      if(data.id) {
-        currentCreatorId = data.id;
-        document.getElementById('creatorSetup').classList.add('hidden');
-        document.getElementById('dashboard').classList.remove('hidden');
-        document.getElementById('shareLink').value = `${window.location.origin}/play.html?c=${slug}`;
-      } else {
-        alert(data.error);
+      if (!name || !slug) {
+        alert('Por favor completa todos los campos.');
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/creators', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, slug, gameType })
+        });
+        const data = await res.json();
+        if(data.id) {
+          currentCreatorId = data.id;
+          document.getElementById('creatorSetup').classList.add('hidden');
+          document.getElementById('dashboard').classList.remove('hidden');
+          document.getElementById('shareLink').value = `${window.location.origin}/play.html?c=${slug}`;
+        } else {
+          alert(data.error || 'Error al crear el perfil');
+        }
+      } catch (err) {
+        alert('No se pudo conectar con el servidor.');
       }
     }
 
@@ -80,6 +89,11 @@
       const name = document.getElementById('rewardName').value;
       const rarity = document.getElementById('rewardRarity').value;
       const mediaUrl = document.getElementById('mediaUrl').value;
+
+      if (!name || !mediaUrl) {
+        alert('Ingresa el nombre y la URL del archivo.');
+        return;
+      }
 
       const res = await fetch(`/api/creators/${currentCreatorId}/rewards`, {
         method: 'POST',
