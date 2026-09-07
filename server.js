@@ -1,13 +1,21 @@
-require('dotenv').config();
-const express = require('express');
-const path = require('path');
-const { PrismaClient } = require('@prisma/client');
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+import dotenv from 'dotenv';
+import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { PrismaClient } from '@prisma/client';
+import Stripe from 'stripe';
+
+dotenv.config();
+
+// Configuración de __dirname para ES Modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const prisma = new PrismaClient();
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const app = express();
 
-// Webhook de Stripe - Requiere parseo raw para validar firma de seguridad
+// Webhook de Stripe - Requiere parseo raw
 app.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
   const sig = req.headers['stripe-signature'];
   let event;
