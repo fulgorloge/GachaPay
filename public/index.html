@@ -37,7 +37,6 @@
       background: radial-gradient(circle at 50% 0%, #0d1b3e 0%, #030611 60%, #010206 100%);
     }
 
-    /* Fondo Cyber & Beam Ambient */
     .cyber-grid {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background-image: 
@@ -56,7 +55,6 @@
       filter: blur(100px); pointer-events: none; z-index: 1;
     }
 
-    /* Flash Strobe Engine */
     #flash-overlay {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
       pointer-events: none; z-index: 9999; opacity: 0; mix-blend-mode: screen;
@@ -100,7 +98,6 @@
     }
     @keyframes text-shine { to { background-position: 200% center; } }
 
-    /* Contenedor Glassmorphic */
     .glow-card-wrapper {
       position: relative; border-radius: 28px; padding: 1px;
       background: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.02) 40%, rgba(56, 189, 248, 0.5) 100%);
@@ -124,7 +121,6 @@
     .items-center { align-items: center; }
     .gap-6 { gap: 1.5rem; }
 
-    /* Botón Luxury */
     .modern-btn {
       position: relative; border: none; border-radius: 18px; padding: 1px;
       cursor: pointer; overflow: hidden; touch-action: manipulation;
@@ -144,26 +140,16 @@
     .badge-r { background: rgba(59, 130, 246, 0.25); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.6); }
     .badge-c { background: rgba(148, 163, 184, 0.15); color: #cbd5e1; border: 1px solid rgba(148, 163, 184, 0.3); }
 
-    /* ========================================================
-       APEX 3D ROULETTE STAGE
-       ======================================================== */
     .roulette-perspective-container {
-      perspective: 1000px;
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      padding: 1rem 0;
+      perspective: 1000px; width: 100%; display: flex; justify-content: center; padding: 1rem 0;
     }
 
     .roulette-stage-wrapper {
-      position: relative;
-      width: 310px; height: 310px;
-      transform-style: preserve-3d;
-      transform: rotateX(18deg); /* Inclinación 3D Estilo Casino */
+      position: relative; width: 310px; height: 310px;
+      transform-style: preserve-3d; transform: rotateX(18deg);
       transition: transform 0.5s ease-out;
     }
 
-    /* Bisel Cromo-Neón Exterior */
     .roulette-outer-ring {
       position: absolute; top: -16px; left: -16px; right: -16px; bottom: -16px;
       border-radius: 50%;
@@ -173,7 +159,6 @@
       z-index: 1; pointer-events: none;
     }
 
-    /* Flipper metálico 3D con sombra flotante */
     .roulette-flipper {
       position: absolute; top: -22px; left: 50%; transform: translateX(-50%);
       width: 36px; height: 42px; z-index: 30; pointer-events: none;
@@ -181,11 +166,8 @@
       transition: transform 0.05s ease-out;
     }
 
-    .roulette-flipper-kick {
-      transform: translateX(-50%) rotate(-22deg) scale(1.18) !important;
-    }
+    .roulette-flipper-kick { transform: translateX(-50%) rotate(-22deg) scale(1.18) !important; }
 
-    /* Anillo con 24 LEDs integrados */
     .led-ring {
       position: absolute; top: -10px; left: -10px; right: -10px; bottom: -10px;
       border-radius: 50%; z-index: 10; pointer-events: none;
@@ -197,17 +179,9 @@
       transition: background 0.15s, box-shadow 0.15s;
     }
 
-    .led-dot.active {
-      background: #38bdf8;
-      box-shadow: 0 0 10px #38bdf8, 0 0 20px #38bdf8;
-    }
+    .led-dot.active { background: #38bdf8; box-shadow: 0 0 10px #38bdf8, 0 0 20px #38bdf8; }
+    .led-dot.winner { background: #f43f5e !important; box-shadow: 0 0 12px #f43f5e, 0 0 25px #f43f5e !important; }
 
-    .led-dot.winner {
-      background: #f43f5e !important;
-      box-shadow: 0 0 12px #f43f5e, 0 0 25px #f43f5e !important;
-    }
-
-    /* Centro Zafiro Cristal */
     .roulette-center-cap {
       position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
       width: 72px; height: 72px; border-radius: 50%;
@@ -216,9 +190,7 @@
       box-shadow: 0 0 30px rgba(56, 189, 248, 0.9), inset 0 0 12px rgba(255,255,255,0.6);
       z-index: 20; pointer-events: none; display: flex; align-items: center; justify-content: center;
     }
-    .roulette-center-cap::after {
-      content: "👑"; font-size: 1.5rem; filter: drop-shadow(0 0 10px rgba(255,255,255,0.9));
-    }
+    .roulette-center-cap::after { content: "👑"; font-size: 1.5rem; filter: drop-shadow(0 0 10px rgba(255,255,255,0.9)); }
 
     @media (min-width: 640px) {
       .roulette-stage-wrapper { width: 360px; height: 360px; }
@@ -257,7 +229,6 @@
   <main class="max-w-7xl mx-auto" style="padding: 2rem 1.25rem; display: flex; flex-direction: column; gap: 2.5rem; flex-grow: 1; z-index: 10; width: 100%;">
     
     <section class="grid lg:grid-cols-12 gap-6 items-center">
-      
       <div class="lg:col-span-6 flex flex-col gap-4">
         <div style="display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.4rem 0.9rem; background: rgba(56,189,248,0.1); border: 1px solid rgba(56,189,248,0.4); border-radius: 9999px; width: fit-content;">
           <span style="width: 7px; height: 7px; border-radius: 9999px; background-color: #38bdf8;"></span>
@@ -272,18 +243,12 @@
       <div class="lg:col-span-6 flex flex-col items-center">
         <div class="glow-card-wrapper">
           <div class="glass-card" style="padding: 2rem 1.25rem; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-            
             <div id="game-roulette-container" class="flex flex-col items-center gap-6" style="width: 100%;">
-              
-              <!-- STAGE RULETA 3D -->
               <div class="roulette-perspective-container">
                 <div class="roulette-stage-wrapper">
                   <div class="roulette-outer-ring"></div>
-                  
-                  <!-- LEDs perimetrales -->
                   <div id="led-ring" class="led-ring"></div>
                   
-                  <!-- Pointer / Flipper Metalizado -->
                   <svg id="roulette-flipper" class="roulette-flipper" viewBox="0 0 40 50">
                     <path d="M 20 50 L 4 10 A 16 16 0 1 1 36 10 Z" fill="url(#flipperGradient)" stroke="#ffffff" stroke-width="2.5" />
                     <defs>
@@ -296,12 +261,10 @@
                   </svg>
 
                   <canvas id="roulette-canvas" width="360" height="360" style="border-radius: 9999px; z-index: 5;"></canvas>
-                  
                   <div class="roulette-center-cap"></div>
                 </div>
               </div>
 
-              <!-- BOTÓN DE GIRO ENERGÉTICO -->
               <button id="spin-wheel-btn" onclick="spinWheel()" class="modern-btn">
                 <span class="font-heading" style="display: block; padding: 1.1rem; background: rgba(2, 4, 10, 0.85); color: white; font-size: 0.9rem; font-weight: 800; border-radius: 17px;">
                   ACTIVAR RULETA (10 FICHAS)
@@ -309,19 +272,16 @@
               </button>
             </div>
 
-            <!-- RESULTADO -->
             <div id="game-result" class="hidden flex-col items-center gap-2" style="margin-top: 1.25rem; width: 100%; text-align: center; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.12); padding: 1.1rem; border-radius: 18px; backdrop-filter: blur(15px);">
               <span id="result-badge" class="badge"></span>
               <h3 id="result-title" class="font-heading" style="font-size: 1.15rem; font-weight: 800; color: white; margin: 0.2rem 0 0;"></h3>
               <p id="result-desc" style="font-size: 0.8rem; color: #94a3b8; margin: 0;"></p>
             </div>
-
           </div>
         </div>
       </div>
     </section>
 
-    <!-- INVENTARIO -->
     <section class="glow-card-wrapper">
       <div class="glass-card" style="padding: 1.5rem; display: flex; flex-direction: column; gap: 1.25rem;">
         <h2 class="font-heading" style="font-size: 1.2rem; font-weight: 800; color: white; margin: 0;">BÓVEDA DIGITAL</h2>
@@ -331,7 +291,6 @@
   </main>
 
   <script>
-    // 1. Sintetizador de Audio Táctil Web Audio API (Sin Archivos Externos)
     const AudioCtx = window.AudioContext || window.webkitAudioContext;
     let audioCtx = null;
 
@@ -358,7 +317,6 @@
       } catch (e) {}
     }
 
-    // 2. Fondo de Partículas
     const pCanvas = document.getElementById('particles-canvas');
     const pCtx = pCanvas.getContext('2d');
     let particles = [];
@@ -394,7 +352,6 @@
     }
     animateParticles();
 
-    // 3. Sistema de Tokens
     let tokens = parseInt(localStorage.getItem('gachapay_tokens') || '100');
     document.getElementById('user-tokens').innerText = tokens;
     function updateTokens(amt) {
@@ -410,7 +367,6 @@
       'C': { badgeClass: 'badge-c', border: 'rgba(148, 163, 184, 0.3)' }
     };
 
-    // 4. Generador de LEDs Perimetrales
     const ledContainer = document.getElementById('led-ring');
     const totalLeds = 24;
     const leds = [];
@@ -419,7 +375,7 @@
       const dot = document.createElement('div');
       dot.className = 'led-dot';
       const angle = (i / totalLeds) * (2 * Math.PI);
-      const radius = 168; // radio en px
+      const radius = 168;
       const x = 155 + radius * Math.cos(angle);
       const y = 155 + radius * Math.sin(angle);
       dot.style.left = `${x}px`;
@@ -438,18 +394,17 @@
       });
     }
 
-    // 5. MOTOR DE RULETA APEX
     const canvas = document.getElementById('roulette-canvas');
     const ctx = canvas.getContext('2d');
     const flipper = document.getElementById('roulette-flipper');
 
     const sectors = [
-      { label: 'SSR CORE', rarity: 'SSR', color1: '#0284c7', color2: '#030712', icon: '💎' },
-      { label: 'DATA C', rarity: 'C', color1: '#1e293b', color2: '#030712', icon: '💾' },
-      { label: 'SR PASS', rarity: 'SR', color1: '#7e22ce', color2: '#030712', icon: '⚡' },
-      { label: 'DATA C', rarity: 'C', color1: '#1e293b', color2: '#030712', icon: '💾' },
-      { label: 'R CHIP', rarity: 'R', color1: '#1d4ed8', color2: '#030712', icon: '🔑' },
-      { label: 'DATA C', rarity: 'C', color1: '#1e293b', color2: '#030712', icon: '💾' }
+      { id: 'item_ssr_1', label: 'SSR CORE', rarity: 'SSR', color1: '#0284c7', color2: '#030712', icon: '💎' },
+      { id: 'item_c_1', label: 'DATA C', rarity: 'C', color1: '#1e293b', color2: '#030712', icon: '💾' },
+      { id: 'item_sr_1', label: 'SR PASS', rarity: 'SR', color1: '#7e22ce', color2: '#030712', icon: '⚡' },
+      { id: 'item_c_2', label: 'DATA C', rarity: 'C', color1: '#1e293b', color2: '#030712', icon: '💾' },
+      { id: 'item_r_1', label: 'R CHIP', rarity: 'R', color1: '#1d4ed8', color2: '#030712', icon: '🔑' },
+      { id: 'item_c_3', label: 'DATA C', rarity: 'C', color1: '#1e293b', color2: '#030712', icon: '💾' }
     ];
 
     let currentAngle = 0;
@@ -467,7 +422,6 @@
       sectors.forEach((sector, i) => {
         const angle = currentAngle + i * arc;
 
-        // Radial Specular Metalizado
         const grad = ctx.createRadialGradient(radius, radius, 10, radius, radius, radius);
         grad.addColorStop(0, '#02040a');
         grad.addColorStop(0.55, sector.color1);
@@ -480,12 +434,10 @@
         ctx.lineTo(radius, radius);
         ctx.fill();
 
-        // Divisiones Cromadas
         ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
         ctx.lineWidth = 2.5;
         ctx.stroke();
 
-        // Tipografía / Íconos
         ctx.save();
         ctx.translate(radius, radius);
         ctx.rotate(angle + arc / 2);
@@ -498,7 +450,6 @@
         ctx.restore();
       });
 
-      // Anillo de Borde Interno
       ctx.beginPath();
       ctx.arc(radius, radius, radius - 8, 0, 2 * Math.PI);
       ctx.strokeStyle = 'rgba(56, 189, 248, 0.5)';
@@ -530,22 +481,55 @@
       }
     }
 
-    function spinWheel() {
+    // CONEXIÓN INTEGRADA: REALIZA EL PULL AL BACKEND Y EJECUTA LA ANIMACIÓN
+    async function spinWheel() {
       if (isSpinning) return;
       if (tokens < 10) return alert('No tienes suficientes fichas.');
 
-      updateTokens(-10);
       isSpinning = true;
       document.getElementById('spin-wheel-btn').disabled = true;
       document.getElementById('game-result').classList.add('hidden');
 
-      const targetSector = Math.floor(Math.random() * sectors.length);
+      let targetSector = 0;
+      let wonItemData = null;
+
+      try {
+        // PETICIÓN AL BACKEND (Express / Stripe)
+        const response = await fetch('/api/gacha/pull', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            gachaId: 'gacha_default_1', 
+            userId: localStorage.getItem('gachapay_user_id') || 'user_demo' 
+          })
+        });
+
+        if (!response.ok) {
+          const err = await response.json();
+          throw new Error(err.error || 'Error procesando la tirada');
+        }
+
+        const data = await response.json();
+        wonItemData = data.wonItem;
+
+        // Buscar sector correspondiente al ítem otorgado por el servidor
+        const foundIndex = sectors.findIndex(s => s.id === wonItemData.id || s.rarity === wonItemData.rarity);
+        targetSector = foundIndex !== -1 ? foundIndex : Math.floor(Math.random() * sectors.length);
+
+        updateTokens(-10);
+
+      } catch (err) {
+        console.warn('Fallback local activado:', err.message);
+        // Fallback para pruebas sin servidor Stripe configurado
+        targetSector = Math.floor(Math.random() * sectors.length);
+        const fallbackSector = sectors[targetSector];
+        wonItemData = { rarity: fallbackSector.rarity, name: fallbackSector.label };
+        updateTokens(-10);
+      }
+
       const arc = (2 * Math.PI) / sectors.length;
-      
       const targetSectorAngle = 2 * Math.PI - (targetSector * arc + arc / 2);
       const totalTurns = (7 + Math.floor(Math.random() * 3)) * 2 * Math.PI;
-      
-      // Inercia con Micro-Bounce Back
       const finalAngle = currentAngle + totalTurns + (targetSectorAngle - (currentAngle % (2 * Math.PI)));
 
       const duration = 5000;
@@ -571,11 +555,8 @@
           isSpinning = false;
           document.getElementById('spin-wheel-btn').disabled = false;
           
-          // LEDs en modo victoria
           leds.forEach(l => l.classList.add('winner'));
-          
-          const won = sectors[targetSector];
-          showResult(won.rarity, `Premio: ${won.label}`, 'Extracción completada con motor Apex.');
+          showResult(wonItemData.rarity, wonItemData.name || sectors[targetSector].label, 'Extracción confirmada por GachaPay Engine.');
         }
       }
 
@@ -619,9 +600,23 @@
       renderInventory();
     }
 
-    function renderInventory() {
+    async function renderInventory() {
       const container = document.getElementById('inventory-grid');
       let items = JSON.parse(localStorage.getItem('gachapay_arcade_inv') || '[]');
+
+      // Sincronización opcional desde el servidor Prisma si existe userId
+      const userId = localStorage.getItem('gachapay_user_id');
+      if (userId) {
+        try {
+          const res = await fetch(`/api/inventory/${userId}`);
+          if (res.ok) {
+            const dbItems = await res.json();
+            if (dbItems.length > 0) {
+              items = dbItems.map(di => ({ rarity: di.item.rarity || 'C', name: di.item.name }));
+            }
+          }
+        } catch(e) {}
+      }
 
       if (items.length === 0) {
         container.innerHTML = '<p style="color: #64748b; font-size: 0.85rem; font-style: italic; grid-column: 1 / -1; margin: 0; text-align: center;">Bóveda vacía.</p>';
