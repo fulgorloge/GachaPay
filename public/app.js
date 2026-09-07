@@ -9,19 +9,32 @@ let localInventory = [];
 let isRolling = false;
 let totalSpent = 0;
 let pityCounter = 0;
+let currentFilter = 'ALL';
 
-// Sistema de Audio Sintético sin archivos externos
+let audioCtx = null;
+
+function getAudioContext() {
+  if (!audioCtx) {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (AudioCtx) audioCtx = new AudioCtx();
+  }
+  if (audioCtx && audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
+  return audioCtx;
+}
+
 function playSound(type) {
   try {
-    const AudioCtx = window.AudioContext || window.webkitAudioContext;
-    if (!AudioCtx) return;
-    const ctx = new AudioCtx();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.connect(gain);
-    gain.connect(ctx.destination);
+    const ctx = getAudioContext();
+    if (!ctx) return;
 
     if (type === 'roll') {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
       osc.type = 'sawtooth';
       osc.frequency.setValueAtTime(150, ctx.currentTime);
       osc.frequency.exponentialRampToValueAtTime(600, ctx.currentTime + 0.3);
@@ -43,6 +56,11 @@ function playSound(type) {
         o.stop(ctx.currentTime + idx * 0.1 + 0.4);
       });
     } else {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
       osc.type = 'sine';
       osc.frequency.setValueAtTime(400, ctx.currentTime);
       gain.gain.setValueAtTime(0.1, ctx.currentTime);
@@ -51,11 +69,39 @@ function playSound(type) {
       osc.stop(ctx.currentTime + 0.2);
     }
   } catch (e) {
-    console.warn('Audio no soportado o bloqueado por el navegador');
+    console.warn('Audio no soportado o bloqueado');
   }
 }
 
-// Tirada local / Demo interactiva
+const DEMO_POOL = [
+  { name: 'Poción Vida', rarity: 'C' },
+  { name: 'Escudo Titán', rarity: 'R' },
+  { name: 'Espada Rúnica', rarity: 'SR' },
+  { name: 'Dragón Carmesí', rarity: 'SSR' }
+];
+
+function evaluateSingleRoll() {
+  pityCounter++;
+  let selectedRarity = 'C';
+
+  if (pityCounter >= 30) {
+    selectedRarity = 'SSR';
+    pityCounter = 0;
+  } else {
+    const rand = Math.random() * 100;
+    if (rand > 97) {
+      selectedRarity = 'SSR';
+      pityCounter = 0;
+    } else if (rand > 85) {
+      selectedRarity = 'SR';
+    } else if (rand > 60) {
+      selectedRarity = 'R';
+    }
+  }
+
+  return DEMO_POOL.find(i => i.rarity === selectedRarity);
+}
+
 function rollGacha(count = 1) {
   if (isRolling) return;
   isRolling = true;
@@ -77,59 +123,48 @@ function rollGacha(count = 1) {
   boxIcon.className = "text-5xl mb-3 animate-spin-custom";
   boxText.innerText = "Abriendo cápsula...";
 
-  const DEMO_POOL = [
-    { name: 'Poción Vida', rarity: 'C' },
-    { name: 'Escudo Titán', rarity: 'R' },
-    { name: 'Espada Rúnica', rarity: 'SR' },
-    { name: 'Dragón Carmesí', rarity: 'SSR' }
-  ];
-
   setTimeout(() => {
-    pityCounter += count;
-    let selectedRarity = 'C';
+    const pulledItems = [];
     
-    if (pityCounter >= 30) {
-      selectedRarity = 'SSR';
-      pityCounter = 0;
-    } else {
-      const rand = Math.random() * 100;
-      if (rand > 97) selectedRarity = 'SSR';
-      else if (rand > 85) selectedRarity = 'SR';
-      else if (rand > 60) selectedRarity = 'R';
+    for (let i = 0; i < count; i++) {
+      const item = evaluateSingleRoll();
+      pulledItems.push(item);
+      localInventory.push(item);
     }
 
-    const reward = DEMO_POOL.find(i => i.rarity === selectedRarity);
-    const config = ITEMS_CONFIG[reward.rarity];
+    const rarityOrder = { 'SSR': 4, 'SR': 3, 'R': 2, 'C': 1 };
+    const bestReward = pulledItems.reduce((prev, curr) => 
+      rarityOrder[curr.rarity] > rarityOrder[prev.rarity] ? curr : prev
+    );
 
-    boxIcon.className = "text-5xl mb-3 animate-bounce";
+    const config = ITEMS_CONFIG[bestReward.rarity];
+
+    boxIcon.className = "text-5xl mb-3";
     boxText.innerText = "Presiona para tirar";
 
-    rewardTitle.innerText = count > 1 ? `${reward.name} (+${count - 1} más)` : reward.name;
-    rarityBadge.innerText = reward.rarity;
+    rewardTitle.innerText = count > 1 ? `${bestReward.name} (+${count - 1} más)` : bestReward.name;
+    rarityBadge.innerText = bestReward.rarity;
     rarityBadge.className = `px-3 py-1 text-xs font-black rounded-full uppercase tracking-widest mb-3 ${config.badgeColor}`;
-    cardBack.className = `absolute inset-0 w-full h-full bg-slate-950 border-2 rounded-xl flex flex-col items-center justify-center backface-hidden rotate-y-180 p-4 transition-all ${config.glow}`;
+    cardBack.className = `absolute inset-0 w-full h-full bg-slate-950 border-2 rounded-2xl flex flex-col items-center justify-center backface-hidden rotate-y-180 p-4 transition-all ${config.glow}`;
 
     cardInner.classList.add('rotate-y-180');
-    playSound(reward.rarity === 'SSR' ? 'SSR' : 'reveal');
+    playSound(pulledItems.some(i => i.rarity === 'SSR') ? 'SSR' : 'reveal');
 
-    for (let i = 0; i < count; i++) {
-      localInventory.push(reward);
-    }
-
-    renderInventory();
-    document.getElementById('pityText').innerText = `${pityCounter}/30 (SSR Garantizado)`;
+    renderInventory(currentFilter);
+    document.getElementById('pityText').innerText = `${pityCounter}/30`;
 
     setTimeout(() => { isRolling = false; }, 600);
   }, 1000);
 }
 
 function renderInventory(filter = 'ALL') {
+  currentFilter = filter;
   const inventory = document.getElementById('inventory');
   const invCount = document.getElementById('invCount');
 
-  const filtered = filter === 'ALL' 
+  const filtered = currentFilter === 'ALL' 
     ? localInventory 
-    : localInventory.filter(i => i.rarity === filter);
+    : localInventory.filter(i => i.rarity === currentFilter);
 
   invCount.innerText = localInventory.length;
 
@@ -141,7 +176,7 @@ function renderInventory(filter = 'ALL') {
   inventory.innerHTML = filtered.slice().reverse().map(item => {
     const config = ITEMS_CONFIG[item.rarity] || ITEMS_CONFIG['C'];
     return `
-      <span class="px-2.5 py-1 text-xs rounded-lg border text-white font-medium ${config.badgeColor} shadow-sm">
+      <span class="px-2.5 py-1 text-xs rounded-lg border font-medium ${config.badgeColor} shadow-sm">
         ${item.name} (${item.rarity})
       </span>
     `;
@@ -150,14 +185,4 @@ function renderInventory(filter = 'ALL') {
 
 function filterInventory(rarity) {
   renderInventory(rarity);
-}
-
-function toggleModal(show) {
-  const modal = document.getElementById('ratesModal');
-  modal.classList.toggle('hidden', !show);
-}
-
-function handleConnect(e) {
-  e.preventDefault();
-  alert('Conectando con el flujo de onboarding de Stripe Connect...');
 }
